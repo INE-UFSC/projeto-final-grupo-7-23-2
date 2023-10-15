@@ -1,5 +1,8 @@
 import pygame
+import sys
+
 from entities.enemy import Enemy
+from path import Path
 
 
 class Game:
@@ -9,7 +12,16 @@ class Game:
 
         self.__is_running = True
 
-        self.enemy = Enemy(pygame.Vector2(100, 100))
+        self.path = Path([
+            pygame.Vector2(100, 100),
+            pygame.Vector2(200, 100),
+            pygame.Vector2(200, 200),
+            pygame.Vector2(100, 200),
+            pygame.Vector2(100, 300),
+            pygame.Vector2(543.2, 444),
+        ])
+
+        self.enemy = Enemy(pygame.Vector2(100, 100), self.path)
 
     def run(self):
         clock = pygame.time.Clock()
@@ -25,36 +37,17 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
-                    self.set_is_running(False)
-            #
-            #     elif event.key == pygame.K_w:
-            #         self.enemy.move_up()
-            #
-            #     elif event.key == pygame.K_d:
-            #         self.enemy.move_right()
-            #
-            #     elif event.key == pygame.K_s:
-            #         self.enemy.move_down()
-            #
-            #     elif event.key == pygame.K_a:
-            #         self.enemy.move_left()
+                    sys.exit()
 
-        keys_pressed = pygame.key.get_pressed()
-        if keys_pressed[pygame.K_w]:
-            self.enemy.move_up()
-
-        if keys_pressed[pygame.K_d]:
-            self.enemy.move_right()
-
-        if keys_pressed[pygame.K_s]:
-            self.enemy.move_down()
-
-        if keys_pressed[pygame.K_a]:
-            self.enemy.move_left()
+        self.enemy.update()
+        if self.enemy.finished_path():
+            pygame.quit()
+            sys.exit()
 
     def render(self):
         self.__screen.fill((0, 0, 0))
         self.enemy.draw_at(self.__screen)
+        self.path.draw_to(self.__screen)
         pygame.display.flip()
 
     def set_is_running(self, is_running: bool) -> None:
@@ -62,4 +55,3 @@ class Game:
 
     def get_screen(self) -> pygame.Surface:
         return self.__screen
-
