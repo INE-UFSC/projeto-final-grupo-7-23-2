@@ -1,27 +1,21 @@
 import pygame
 import sys
 
+import states.state_interfaces as state_interfaces
+from states.initial_state import InitialState
+from states.in_game_state import InGameState
+
 from entities.enemy import Enemy
 from path import Path
 
 
-class Game:
+class Game(state_interfaces.Context):
     def __init__(self):
+        state_interfaces.Context.__init__(self, InGameState(self))
         pygame.init()
         self.__screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
 
         self.__is_running = True
-
-        self.path = Path([
-            pygame.Vector2(100, 100),
-            pygame.Vector2(200, 100),
-            pygame.Vector2(200, 200),
-            pygame.Vector2(100, 200),
-            pygame.Vector2(100, 300),
-            pygame.Vector2(543.2, 444),
-        ])
-
-        self.enemy = Enemy(pygame.Vector2(100, 100), self.path)
 
     def run(self):
         clock = pygame.time.Clock()
@@ -33,22 +27,15 @@ class Game:
             clock.tick(60)
 
     def update(self, delta_time: float = 0.0):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
+        quit_event = pygame.event.get(pygame.QUIT)
+        if len(quit_event) > 0:
+            self.set_is_running(False)
+            return
 
-        self.enemy.update()
-        if self.enemy.finished_path():
-            pygame.quit()
-            sys.exit()
+        self.get_state().update()
 
     def render(self):
-        self.__screen.fill((0, 0, 0))
-        self.enemy.draw_at(self.__screen)
-        self.path.draw_to(self.__screen)
-        pygame.display.flip()
+        self.get_state().render()
 
     def set_is_running(self, is_running: bool) -> None:
         self.__is_running = is_running
