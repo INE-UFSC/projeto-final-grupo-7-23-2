@@ -1,7 +1,10 @@
 import pygame
 
+from drawable import Drawable
 
-class Path:
+
+# path é drawable, mas apenas temporariamente, para poder testar
+class Path(Drawable):
     def __init__(self, points: list[pygame.Vector2]) -> None:
         self.__points = points
         self.__margin = 15

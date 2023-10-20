@@ -2,6 +2,8 @@ from __future__ import annotations
 import pygame
 import sys
 
+from drawable import Drawable
+
 import states.state as state
 import game
 
@@ -24,6 +26,8 @@ class InGameState(state.State):
 
         self.enemy = Enemy(pygame.Vector2(100, 100), self.path)
 
+        self.drawables: list[Drawable] = [self.path, self.enemy]
+
     def handle_input(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -39,5 +43,5 @@ class InGameState(state.State):
 
     def render(self) -> None:
         screen = self.get_ctx().get_screen()
-        self.path.draw_at(screen)
-        self.enemy.draw_at(screen)
+        for drawable in self.drawables:
+            drawable.draw_at(screen)
