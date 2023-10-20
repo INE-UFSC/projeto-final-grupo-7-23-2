@@ -1,7 +1,9 @@
+from __future__ import annotations
 import pygame
 import sys
 
-from states.initial_state import InitialState
+import states.state as state
+from states.menu_state import MenuState
 from states.in_game_state import InGameState
 
 from entities.enemy import Enemy
@@ -10,7 +12,7 @@ from path import Path
 
 class Game():
     def __init__(self):
-        self.__state = InGameState(self)
+        self.__state = MenuState(self)
         pygame.init()
 
         self.__screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
@@ -20,24 +22,28 @@ class Game():
         clock = pygame.time.Clock()
 
         while self.__is_running:
-            delta_time = clock.tick() / 1000.0
+            delta_time = clock.tick(60) / 1000.0
+            self.handle_input()
             self.update(delta_time)
             self.render()
-            clock.tick(60)
+
+    def handle_input(self):
+        self.__state.handle_input()
 
     def update(self, delta_time: float = 0.0):
-        quit_event = pygame.event.get(pygame.QUIT)
-        if len(quit_event) > 0:
-            self.set_is_running(False)
-            return
-
-        self.get_state().update()
+        self.__state.update(delta_time)
 
     def render(self):
-        self.get_state().render()
+        self.__screen.fill((0, 0, 0))
+        self.__state.render()
+        pygame.display.flip()
+
+    def change_state(self, new_state: state.State) -> None:
+        self.__state = new_state
 
     def set_is_running(self, is_running: bool) -> None:
         self.__is_running = is_running
 
     def get_screen(self) -> pygame.Surface:
         return self.__screen
+

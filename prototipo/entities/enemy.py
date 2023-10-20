@@ -14,20 +14,20 @@ class Enemy(Entity):
 
         self.__current_point = self.__path.get_points()[1]
         self.__current_point_index = 1
-        self.__speed = 5.0
+        self.__speed = 100.0
         self.__velocity = pygame.Vector2(0, 0)
 
-    def update(self) -> None:
+    def update(self, delta_time: float) -> None:
         if self.__state == "follow_path":
-            self.follow_path()
+            self.follow_path(delta_time)
 
         elif self.__state == "idle":
-            self.idle()
+            self.idle(delta_time)
 
         self.set_position(self.get_position() + self.get_velocity())
 
-    def follow_path(self) -> None:
-        if self.get_position().distance_to(self.__current_point) < 7:
+    def follow_path(self, delta_time: float) -> None:
+        if self.get_position().distance_to(self.__current_point) < 1.5:
             if self.__current_point_index == len(self.__path.get_points()) - 1:
                 self.__state = "idle"
                 self.__finished_path = True
@@ -37,10 +37,10 @@ class Enemy(Entity):
                 self.__current_point_index += 1
                 self.__current_point = self.__path.get_points()[self.__current_point_index]
 
-        self.set_velocity((self.__current_point - self.get_position()).normalize() * self.__speed)
+        self.set_velocity((self.__current_point - self.get_position()).normalize() * self.__speed * delta_time)
         self.set_position(self.get_position() + self.get_velocity())
 
-    def idle(self) -> None:
+    def idle(self, delta_time: float) -> None:
         self.__velocity = pygame.Vector2(0, 0)
 
     def draw_at(self, screen: pygame.Surface) -> None:

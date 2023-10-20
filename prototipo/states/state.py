@@ -1,20 +1,24 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 
-from game import Game
+import game
 
 class State(ABC):
-    def __init__(self, context: Game):
+    def __init__(self, context: game.Game):
         self.__context = context
 
+    def get_ctx(self) -> game.Game:
+        return self.__context
+
     @abstractmethod
-    def update(self):
+    def handle_input(self) -> None:
+        pass
+
+    @abstractmethod
+    def update(self, delta_time: float):
         pass
 
     @abstractmethod
     def render(self):
         pass
 
-    @abstractmethod
-    def handle_input(self):
-        pass
