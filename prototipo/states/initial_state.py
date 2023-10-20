@@ -1,7 +1,8 @@
 from __future__ import annotations
-import states.state_interfaces as state_interfaces
+import states.state as state
+from game import Game
 
 
-class InitialState(state_interfaces.State):
-    def __init__(self, context: state_interfaces.Context):
-        state_interfaces.State.__init__(self, context)
+class InitialState(state.State):
+    def __init__(self, context: Game):
+        state.State.__init__(self, context)

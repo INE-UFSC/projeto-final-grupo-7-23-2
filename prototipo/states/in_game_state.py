@@ -1,15 +1,16 @@
 import pygame
 import sys
 
-import states.state_interfaces as state_interfaces
+import states.state as state
+from game import Game
 
 from path import Path
 from entities.enemy import Enemy
 
 
-class InGameState(state_interfaces.State):
-    def __init__(self, context: state_interfaces.Context):
-        state_interfaces.State.__init__(self, context)
+class InGameState(state.State):
+    def __init__(self, context: Game):
+        state.State.__init__(self, context)
 
         self.path = Path([
             pygame.Vector2(100, 100),

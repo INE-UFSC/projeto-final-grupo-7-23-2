@@ -1,7 +1,6 @@
 import pygame
 import sys
 
-import states.state_interfaces as state_interfaces
 from states.initial_state import InitialState
 from states.in_game_state import InGameState
 
@@ -9,12 +8,12 @@ from entities.enemy import Enemy
 from path import Path
 
 
-class Game(state_interfaces.Context):
+class Game():
     def __init__(self):
-        state_interfaces.Context.__init__(self, InGameState(self))
+        self.__state = InGameState(self)
         pygame.init()
-        self.__screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
 
+        self.__screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
         self.__is_running = True
 
     def run(self):
