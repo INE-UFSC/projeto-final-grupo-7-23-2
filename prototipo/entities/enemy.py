@@ -5,8 +5,8 @@ from entities.entity import Entity
 from path import Path
 
 class Enemy(Entity):
-    def __init__(self, position: pygame.Vector2, path: Path):
-        Entity.__init__(self, position)
+    def __init__(self, path: Path):
+        Entity.__init__(self, path.get_start())
         self.__path = path
         self.__state = "follow_path"
         self.__finished_path = False
