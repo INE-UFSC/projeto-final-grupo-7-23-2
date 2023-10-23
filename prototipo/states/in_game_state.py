@@ -31,10 +31,10 @@ class InGameState(state.State):
         self.enemy = Enemy(self.path)
         self.bullets: list[Bullet] = []
         self.towers = [
-            Tower(pygame.Vector2(450, 300), 250, self.enemy, self.bullets),
-            Tower(pygame.Vector2(770, 300), 250, self.enemy, self.bullets),
-            Tower(pygame.Vector2(1245, 300), 250, self.enemy, self.bullets),
-            Tower(pygame.Vector2(980, 660), 250, self.enemy, self.bullets)
+            Tower(pygame.Vector2(450, 300), 250, self.enemy, 50, self.bullets),
+            Tower(pygame.Vector2(770, 300), 250, self.enemy, 50, self.bullets),
+            Tower(pygame.Vector2(1245, 300), 250, self.enemy, 50, self.bullets),
+            Tower(pygame.Vector2(980, 660), 250, self.enemy, 50, self.bullets)
         ]
 
         self.drawables: list[Drawable] = [self.path, self.player_base, self.enemy, *self.towers]
@@ -59,14 +59,16 @@ class InGameState(state.State):
             bullet.update(delta_time)
             if bullet.get_position().distance_to(self.enemy.get_position()) < 10:
                 self.bullets.remove(bullet)
+                self.enemy.take_damage(bullet.get_damage())
+                if not self.enemy.is_alive():
+                    print('inimigo morreu')
+                    pygame.quit()
+                    sys.exit()
 
-        if self.enemy.get_position().distance_to(self.player_base.get_position()) <= 40:
+        if self.enemy.finished_path():
+            print('inimigo chegou na base')
             pygame.quit()
             sys.exit()
-
-        # if self.enemy.finished_path():
-        #     pygame.quit()
-        #     sys.exit()
 
     def render(self) -> None:
         screen = self.get_ctx().get_screen()

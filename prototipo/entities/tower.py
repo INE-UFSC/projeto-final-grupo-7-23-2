@@ -6,11 +6,12 @@ from entities.bullet import Bullet
 
 
 class Tower(Entity):
-    def __init__(self, position: pygame.Vector2, range: float, target: Enemy, bullets_list: list[Bullet]):
+    def __init__(self, position: pygame.Vector2, range: float, target: Enemy, damage: int, bullets_list: list[Bullet]):
         Entity.__init__(self, position)
         self.__state = self.watching_target
         self.__range = range
         self.__target: Enemy = target
+        self.__damage = damage
         self.__bullets_list = bullets_list
         self.__angle: float
         self.__aim_vector = pygame.Vector2(0, 0)
@@ -27,7 +28,7 @@ class Tower(Entity):
 
         current_time = pygame.time.get_ticks()
         if current_time - self.__last_shoot > self.__cooldown * 1000:
-            self.__bullets_list.append(Bullet(self.get_position() - self.__aim_vector, self.__target))
+            self.__bullets_list.append(Bullet(self.get_position() - self.__aim_vector, self.__target, self.__damage))
             self.__last_shoot = current_time
             print('atirando')
 

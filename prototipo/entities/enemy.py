@@ -11,6 +11,7 @@ class Enemy(Entity):
         self.__state = "follow_path"
         self.__finished_path = False
         self.__health = 500
+        self.__is_alive = True
 
         if len(self.__path.get_points()) < 2 :
             raise ValueError("Path must have at least two points")
@@ -64,4 +65,7 @@ class Enemy(Entity):
     def take_damage(self, damage: int) -> None:
         self.__health -= damage
         if self.__health <= 0:
-            self.__state = 'dead'
+            self.__is_alive = False
+
+    def is_alive(self) -> bool:
+        return self.__is_alive
