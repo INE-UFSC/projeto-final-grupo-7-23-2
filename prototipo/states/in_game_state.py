@@ -10,6 +10,8 @@ import game
 from path import Path
 from entities.enemy import Enemy
 from entities.tower import Tower
+from entities.bullet import Bullet
+from entities.player_base import PlayerBase
 
 
 class InGameState(state.State):
@@ -25,15 +27,17 @@ class InGameState(state.State):
             pygame.Vector2(1750, 540),
         ])
 
+        self.player_base = PlayerBase(self.path.get_end() + pygame.Vector2(40, 0))
         self.enemy = Enemy(self.path)
+        self.bullets: list[Bullet] = []
         self.towers = [
-            Tower(pygame.Vector2(400, 300), 250, self.enemy),
-            Tower(pygame.Vector2(770, 300), 250, self.enemy),
-            Tower(pygame.Vector2(1245, 300), 250, self.enemy),
-            Tower(pygame.Vector2(980, 660), 250, self.enemy)
+            Tower(pygame.Vector2(450, 300), 250, self.enemy, self.bullets),
+            Tower(pygame.Vector2(770, 300), 250, self.enemy, self.bullets),
+            Tower(pygame.Vector2(1245, 300), 250, self.enemy, self.bullets),
+            Tower(pygame.Vector2(980, 660), 250, self.enemy, self.bullets)
         ]
 
-        self.drawables: list[Drawable] = [self.path, self.enemy, *self.towers]
+        self.drawables: list[Drawable] = [self.path, self.player_base, self.enemy, *self.towers]
 
     def handle_input(self) -> None:
         for event in pygame.event.get():
@@ -50,6 +54,16 @@ class InGameState(state.State):
         self.enemy.update(delta_time)
         for tower in self.towers:
             tower.update(delta_time)
+
+        for bullet in self.bullets:
+            bullet.update(delta_time)
+            if bullet.get_position().distance_to(self.enemy.get_position()) < 10:
+                self.bullets.remove(bullet)
+
+        if self.enemy.get_position().distance_to(self.player_base.get_position()) <= 40:
+            pygame.quit()
+            sys.exit()
+
         # if self.enemy.finished_path():
         #     pygame.quit()
         #     sys.exit()
@@ -58,3 +72,6 @@ class InGameState(state.State):
         screen = self.get_ctx().get_screen()
         for drawable in self.drawables:
             drawable.draw_at(screen)
+
+        for bullet in self.bullets:
+            bullet.draw_at(screen)
