@@ -17,7 +17,7 @@ class Bullet(Entity):
         self.set_position(self.get_position() + self.__velocity)
 
     def draw_at(self, screen: pygame.Surface) -> None:
-        pygame.draw.circle(screen, (100, 30, 100), self.get_position(), 3)
+        pygame.draw.circle(screen, (100, 120, 255), self.get_position(), 3)
 
     def get_damage(self) -> int:
         return self.__damage
