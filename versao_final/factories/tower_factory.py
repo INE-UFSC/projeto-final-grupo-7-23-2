@@ -15,3 +15,8 @@ class Tower_Factory:
     
     def create_tower(self, position: pygame.Vector2):
         return Tower(position, self.tower_range, self.tower_dmg, self.tower_price)
+    
+    def upgrade(self):
+        self.tower_dmg *= 1.5
+        self.tower_range *= 1.5
+        self.tower_price *= 1.5
