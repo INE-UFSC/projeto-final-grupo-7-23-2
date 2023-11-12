@@ -1,8 +1,11 @@
 import pygame
-from abc import ABC, abstractmethod
+
+from abc import abstractmethod
+
+from drawable import Drawable
 
 
-class Entity(ABC):
+class Entity(Drawable):
     def __init__(self, position: pygame.Vector2):
         self.__position = position
 

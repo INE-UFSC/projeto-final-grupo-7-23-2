@@ -1,14 +1,17 @@
 import pygame
 
+from drawable import Drawable
 
-class Path:
+
+# path é drawable, mas apenas temporariamente, para poder testar
+class Path(Drawable):
     def __init__(self, points: list[pygame.Vector2]) -> None:
         self.__points = points
         self.__margin = 15
 
     def draw_at(self, screen: pygame.Surface) -> None:
         for start, end in zip(self.get_points(), self.get_points()[1:]):
-            pygame.draw.line(screen, (0, 0, 255), start, end, 5)
+            pygame.draw.line(screen, (60, 60, 60), start, end, 5)
 
     def get_points(self) -> list[pygame.Vector2]:
         return self.__points.copy()
