@@ -7,6 +7,7 @@ from drawable import Drawable
 import states.state as state
 import game
 
+from levels.map import Map
 from path import Path
 from entities.enemy import Enemy
 from entities.tower import Tower
@@ -38,6 +39,8 @@ class InGameState(state.State):
         ]
 
         self.drawables: list[Drawable] = [self.path, self.player_base, self.enemy, *self.towers]
+
+        self.__map = Map()
 
     def handle_input(self) -> None:
         for event in pygame.event.get():
@@ -77,3 +80,5 @@ class InGameState(state.State):
 
         for bullet in self.bullets:
             bullet.draw_at(screen)
+
+        self.__map.draw_at(screen)
