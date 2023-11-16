@@ -10,4 +10,4 @@ class LevelSelectUI(UI):
             TextButton(pygame.font.Font('assets/fonts/Pixeltype.ttf',25).render('Jogar',True,'black'),'green',pygame.Rect(200,700,50,20),lambda: context.change_state(in_game_state.InGameState(context)))
         ]
     def render(self, screen):
-        pass
+        screen.fill('white')
