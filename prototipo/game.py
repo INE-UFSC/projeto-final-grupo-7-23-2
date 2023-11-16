@@ -15,7 +15,7 @@ class Game():
         self.__state = MenuState(self)
         pygame.init()
 
-        self.__screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
+        self.__screen = pygame.display.set_mode((1280, 720))
         self.__is_running = True
 
     def run(self):
