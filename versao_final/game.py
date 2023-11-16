@@ -7,8 +7,8 @@ from states.menu_state import MenuState
 
 class Game():
     def __init__(self):
-        self.__state = MenuState(self)
         pygame.init()
+        self.__state = MenuState(self)
 
         self.__screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
         self.__is_running = True

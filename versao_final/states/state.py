@@ -1,6 +1,5 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from buttons.button import Button
 from states.UI.ui import UI
 
 class State(ABC):
@@ -16,15 +15,12 @@ class State(ABC):
     def update(self, delta_time: float):
         pass
 
-    @abstractmethod
-    def render(self):
-        pass
 
-    @abstractmethod
-    def change_state(self, new_state):
-        pass
+    def render(self):
+        self.UI.render(self.get_ctx().get_screen())
 
     def check_buttons(self, mouse_pos): #the Game class will give us the mouse position upon calling this function
         for button in self.buttons:
             if button.get_rect().collidepoint(mouse_pos):
                 button.activate()
+                return

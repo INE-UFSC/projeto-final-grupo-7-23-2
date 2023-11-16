@@ -1,6 +1,5 @@
 import pygame
 from abc import ABC, abstractmethod
-screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
 from typing import Callable
 
 class Button(ABC):
@@ -12,8 +11,11 @@ class Button(ABC):
     def get_rect(self):
         return self.__rect
     
+    def get_color(self):
+        return self.__color
+    
     @abstractmethod
-    def draw(self):
+    def draw(self, screen):
         pass
     
     def activate(self):
