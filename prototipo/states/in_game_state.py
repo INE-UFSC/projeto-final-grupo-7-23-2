@@ -63,22 +63,24 @@ class InGameState(state.State):
             if bullet.get_position().distance_to(self.enemy.get_position()) < 10:
                 self.bullets.remove(bullet)
                 self.enemy.take_damage(bullet.get_damage())
-                if not self.enemy.is_alive():
-                    print('inimigo morreu')
-                    pygame.quit()
-                    sys.exit()
+                # if not self.enemy.is_alive():
+                #     print('inimigo morreu')
+                #     pygame.quit()
+                #     sys.exit()
 
-        if self.enemy.finished_path():
-            print('inimigo chegou na base')
-            pygame.quit()
-            sys.exit()
+        # if self.enemy.finished_path():
+        #     print('inimigo chegou na base')
+        #     pygame.quit()
+        #     sys.exit()
 
     def render(self) -> None:
         screen = self.get_ctx().get_screen()
+
+        self.__map.draw_at(screen)
+
         for drawable in self.drawables:
             drawable.draw_at(screen)
 
         for bullet in self.bullets:
             bullet.draw_at(screen)
 
-        self.__map.draw_at(screen)
