@@ -15,7 +15,7 @@ class Button(ABC):
         return self.__color
     
     @abstractmethod
-    def draw(self, screen):
+    def draw_at(self, screen):
         pass
     
     def activate(self):

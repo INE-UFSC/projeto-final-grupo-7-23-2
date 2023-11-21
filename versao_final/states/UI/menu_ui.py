@@ -15,4 +15,4 @@ class MenuUI(UI):
         screen.blit(self.background,(0,-100))
         screen.blit(self.title, self.title.get_rect(center=(screen.get_rect().centerx,100)))
         for button in self.buttons:
-            button.draw(screen)
+            button.draw_at(screen)
