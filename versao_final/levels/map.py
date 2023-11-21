@@ -23,7 +23,9 @@ class Map(Drawable):
             self.__map_array.append([tileset[tile] for tile in line])
 
     def draw_at(self, screen: pygame.Surface) -> None:
+        size = 40
         for i, row in enumerate(self.__map_array):
             for j, tile in enumerate(row):
-                screen.blit(tile, (j * 32, i * 32))
+                tile = pygame.transform.scale(tile, (size, size))
+                screen.blit(tile, (j * size, i * size))
 

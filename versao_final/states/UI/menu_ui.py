@@ -11,7 +11,7 @@ class MenuUI(UI):
         ]
         self.title= pygame.font.Font('assets/fonts/OldeEnglish.ttf',80).render('Guardiões das Torres', True, 'black')
         self.background = pygame.image.load('assets/backgrounds/basic_background.png')
-    def render(self, screen):
+    def draw_at(self, screen):
         screen.blit(self.background,(0,-100))
         screen.blit(self.title, self.title.get_rect(center=(screen.get_rect().centerx,100)))
         for button in self.buttons:

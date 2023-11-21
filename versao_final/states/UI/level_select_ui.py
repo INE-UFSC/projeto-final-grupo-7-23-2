@@ -15,7 +15,7 @@ class LevelSelectUI(UI):
         ]
         self.title= pygame.font.Font('assets/fonts/Pixeltype.ttf',80).render('Escolha uma Fase', True, 'black')
         self.background = pygame.image.load('assets/backgrounds/basic_background.png')
-    def render(self, screen):
+    def draw_at(self, screen: pygame.Surface) -> None:
         screen.blit(self.background,(0,-100))
         screen.blit(self.title, self.title.get_rect(center=(screen.get_rect().centerx,100)))
         for button in self.buttons:

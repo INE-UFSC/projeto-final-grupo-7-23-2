@@ -1,6 +1,10 @@
 from __future__ import annotations
+
+import pygame
+
 from abc import ABC, abstractmethod
 from buttons.button import Button
+
 import game
 
 class UI(ABC):
@@ -13,5 +17,5 @@ class UI(ABC):
         return self.__context
 
     @abstractmethod
-    def render(self):
+    def draw_at(self, screen: pygame.Surface) -> None:
         pass

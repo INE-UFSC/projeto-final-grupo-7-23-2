@@ -53,6 +53,10 @@ class InGameState(state.State):
                 if event.button == pygame.BUTTON_LEFT:
                     print(pygame.mouse.get_pos())
 
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
     def update(self, delta_time: float) -> None:
         self.enemy.update(delta_time)
         for tower in self.towers:
