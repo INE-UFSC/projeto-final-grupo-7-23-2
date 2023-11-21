@@ -9,4 +9,5 @@ class TextButton(Button):
     def draw(self, screen):
         pygame.draw.rect(screen, self.get_color(), self.get_rect(),0,10)
         pygame.draw.rect(screen, 'black', self.get_rect(),3,10)
-        screen.blit(self.text, self.get_rect())
+        #screen.blit(self.text, self.get_rect())
+        screen.blit(self.text,self.text.get_rect(center=(self.get_rect().center)))
