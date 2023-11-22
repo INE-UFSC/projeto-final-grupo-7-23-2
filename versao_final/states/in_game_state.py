@@ -16,17 +16,20 @@ from entities.player_base import PlayerBase
 import states.UI.menu_ui as menu_ui
 
 class InGameState(state.State):
-    def __init__(self, context: game.Game):
+    def __init__(self, context: game.Game, level_number: int):
         state.State.__init__(self, context, menu_ui.MenuUI(context) )
 
-        self.path = Path([
-            pygame.Vector2(100, 540),
-            pygame.Vector2(660, 540),
-            pygame.Vector2(660, 100),
-            pygame.Vector2(1300, 100),
-            pygame.Vector2(1300, 540),
-            pygame.Vector2(1750, 540),
-        ])
+        self.path = Path(
+            [
+                pygame.Vector2(100, 540),
+                pygame.Vector2(660, 540),
+                pygame.Vector2(660, 100),
+                pygame.Vector2(1300, 100),
+                pygame.Vector2(1300, 540),
+                pygame.Vector2(1750, 540),
+            ],
+            15
+        )
 
         self.player_base = PlayerBase(self.path.get_end() + pygame.Vector2(40, 0))
         self.enemy = Enemy(self.path)
@@ -40,7 +43,7 @@ class InGameState(state.State):
 
         self.drawables: list[Drawable] = [self.path, self.player_base, self.enemy, *self.towers]
 
-        self.__map = Map()
+        self.__map = Map(level_number)
 
     def handle_input(self) -> None:
         for event in pygame.event.get():

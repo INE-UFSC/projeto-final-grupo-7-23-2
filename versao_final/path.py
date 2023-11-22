@@ -5,7 +5,10 @@ from drawable import Drawable
 
 # path é drawable, mas apenas temporariamente, para poder testar
 class Path(Drawable):
-    def __init__(self, points: list[pygame.Vector2]) -> None:
+    def __init__(self, points: list[pygame.Vector2], margin: int) -> None:
+        if len(points) == 0:
+            raise ValueError('Path must have at least one point')
+
         self.__points = points
         self.__margin = 15
 
