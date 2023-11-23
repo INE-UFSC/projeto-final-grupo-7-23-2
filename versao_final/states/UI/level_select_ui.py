@@ -40,7 +40,7 @@ class LevelSelectUI(UI):
         self.background = pygame.image.load('assets/backgrounds/basic_background.png')
 
     def draw_at(self, screen: pygame.Surface) -> None:
-        screen.blit(self.background, (0, -100))
+        screen.blit(self.background, self.background.get_rect(center = (C().get_width()/2,C().get_height()/2)))
         screen.blit(self.title, self.title.get_rect(center=(screen.get_rect().centerx, 100)))
 
         for button in self.buttons:
