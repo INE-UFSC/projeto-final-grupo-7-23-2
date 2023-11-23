@@ -3,9 +3,10 @@ from abc import ABC, abstractmethod
 from typing import Callable
 
 class Button(ABC):
-    def __init__(self,  color: str, rect: pygame.Rect, action: Callable) -> None:
+    def __init__(self,  color: str, centerx, centery, width:int, height:int, action: Callable) -> None:
         self.__color = color
-        self.__rect = rect
+        self.__rect = pygame.Rect(0,0,width,height)
+        self.__rect.center = (centerx, centery)
         self.__action = action
     
     def get_rect(self):

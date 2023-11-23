@@ -1,6 +1,5 @@
 from __future__ import annotations
 import pygame
-import sys
 
 from drawable import Drawable
 
@@ -46,12 +45,14 @@ class InGameState(state.State):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
+                    self.get_ctx().exit_game()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
                     print(pygame.mouse.get_pos())
+
+            elif event.type == pygame.QUIT:
+                self.get_ctx().exit_game()
 
     def update(self, delta_time: float) -> None:
         self.enemy.update(delta_time)
