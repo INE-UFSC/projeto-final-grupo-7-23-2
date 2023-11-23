@@ -1,6 +1,5 @@
 import pygame
 
-from drawable import Drawable
 from entities.entity import Entity
 from path import Path
 
