@@ -4,6 +4,7 @@ from buttons.text_button import TextButton
 import pygame
 import states.in_game_state as in_game_state
 import states.menu_state as menu_state
+from singletons.constants import Constants as C
 
 
 class LevelSelectUI(UI):

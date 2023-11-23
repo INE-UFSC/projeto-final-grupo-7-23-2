@@ -3,6 +3,7 @@ from states.UI.ui import UI
 from buttons.text_button import TextButton
 import pygame
 import states.level_select_state as level_select_state
+from singletons.constants import Constants as C
 
 
 class MenuUI(UI):
@@ -13,6 +14,7 @@ class MenuUI(UI):
         ]
         self.title= pygame.font.Font('assets/fonts/OldeEnglish.ttf',80).render('Guardiões das Torres', True, 'black')
         self.background = pygame.image.load('assets/backgrounds/basic_background.png')
+
     def draw_at(self, screen):
         screen.blit(self.background,(0,-100))
         screen.blit(self.title, self.title.get_rect(center=(screen.get_rect().centerx,100)))
