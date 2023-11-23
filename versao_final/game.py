@@ -3,12 +3,13 @@ import pygame
 
 import states.state as state
 from states.menu_state import MenuState
-
+from states.game_over_state import GameOverState
 
 class Game():
     def __init__(self):
         pygame.init()
         self.__state = MenuState(self)
+        self.__state = GameOverState(self)
 
         self.__screen = pygame.display.set_mode((1280, 720))
         self.__is_running = True
