@@ -20,3 +20,4 @@ class Tower_Factory:
         self.tower_dmg *= 1.5
         self.tower_range *= 1.5
         self.tower_price *= 1.5
+

@@ -33,13 +33,13 @@
         }, 
         {
          "color":"#ff0000",
-         "draworder":"topdown",
+         "draworder":"index",
          "id":2,
          "name":"waypoints",
          "objects":[
                 {
                  "height":0,
-                 "id":7,
+                 "id":20,
                  "name":"",
                  "polyline":[
                         {
@@ -80,7 +80,7 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":12,
+ "nextobjectid":21,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"git",
