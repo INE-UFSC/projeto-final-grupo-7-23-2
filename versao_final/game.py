@@ -1,5 +1,6 @@
 from __future__ import annotations
 import pygame
+import sys
 
 import states.state as state
 from states.menu_state import MenuState
@@ -11,7 +12,6 @@ class Game():
     def __init__(self):
         pygame.init()
         self.__state = MenuState(self)
-
         self.__screen = pygame.display.set_mode(C().get_screen_size())
         self.__is_running = True
 
@@ -44,4 +44,7 @@ class Game():
 
     def get_screen(self) -> pygame.Surface:
         return self.__screen
-
+    
+    def exit_game(self):
+        pygame.quit()
+        sys.exit()

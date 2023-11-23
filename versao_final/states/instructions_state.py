@@ -1,13 +1,13 @@
 from __future__ import annotations
-from states.state import State
-from states.UI.level_select_ui import LevelSelectUI
+import states.state as state
 import pygame
 import game
 
-class LevelSelectState(State):
+from states.UI.instructions_ui import InstructionsUI
+
+class InstructionsState(state.State):
     def __init__(self, context: game.Game):
-        super().__init__(context, LevelSelectUI(context))
-    
+        super().__init__(context, InstructionsUI(context))
     def handle_input(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -17,5 +17,6 @@ class LevelSelectState(State):
                 self.check_buttons(pygame.mouse.get_pos())
             elif event.type == pygame.QUIT:
                 self.get_ctx().exit_game()
-    def update(self, delta_time: float) -> None:
+    def update(self, delta_time: float):
         return
+
