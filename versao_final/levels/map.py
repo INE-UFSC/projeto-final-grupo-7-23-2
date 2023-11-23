@@ -1,7 +1,6 @@
 import pygame
 import json
 
-from dao.map_dao import MapDAO
 from drawable import Drawable
 from path import Path
 

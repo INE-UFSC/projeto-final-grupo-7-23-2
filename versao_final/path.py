@@ -10,7 +10,6 @@ class Path(Drawable):
             raise ValueError('Path must have at least one point')
 
         self.__points = points
-        self.__margin = 15
 
     def draw_at(self, screen: pygame.Surface) -> None:
         for start, end in zip(self.get_points(), self.get_points()[1:]):
@@ -24,7 +23,4 @@ class Path(Drawable):
 
     def get_end(self) -> pygame.Vector2:
         return self.get_points()[-1]
-
-    def get_margin(self) -> float:
-        return self.__margin
 

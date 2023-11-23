@@ -8,7 +8,6 @@ import states.state as state
 import game
 
 from levels.map import Map
-from path import Path
 from entities.enemy import Enemy
 from entities.tower import Tower
 from entities.bullet import Bullet
@@ -19,20 +18,10 @@ class InGameState(state.State):
     def __init__(self, context: game.Game, level_number: int):
         state.State.__init__(self, context, menu_ui.MenuUI(context) )
 
-        self.path = Path(
-            [
-                pygame.Vector2(100, 540),
-                pygame.Vector2(660, 540),
-                pygame.Vector2(660, 100),
-                pygame.Vector2(1300, 100),
-                pygame.Vector2(1300, 540),
-                pygame.Vector2(1750, 540),
-            ],
-            15
-        )
-
-        self.player_base = PlayerBase(self.path.get_end() + pygame.Vector2(40, 0))
-        self.enemy = Enemy(self.path)
+        self.__map = Map(level_number)
+        path = self.__map.get_path()
+        self.player_base = PlayerBase(path.get_end() + pygame.Vector2(40, 0))
+        self.enemy = Enemy(path)
         self.bullets: list[Bullet] = []
         self.towers = [
             Tower(pygame.Vector2(450, 300), 250, self.enemy, 50, self.bullets),
@@ -41,9 +30,7 @@ class InGameState(state.State):
             Tower(pygame.Vector2(980, 660), 250, self.enemy, 50, self.bullets)
         ]
 
-        self.drawables: list[Drawable] = [self.path, self.player_base, self.enemy, *self.towers]
-
-        self.__map = Map(level_number)
+        self.drawables: list[Drawable] = [path, self.player_base, self.enemy, *self.towers]
 
     def handle_input(self) -> None:
         for event in pygame.event.get():
