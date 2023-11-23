@@ -19,14 +19,11 @@ class Map(Drawable):
         path = map_dict['layers'][1]['objects'][0]['polyline']
         path_origin_x = map_dict['layers'][1]['objects'][0]['x']
         path_origin_y = map_dict['layers'][1]['objects'][0]['y']
-        print(path_origin_x, path_origin_y)
         path_points: list[pygame.Vector2] = []
         for point in path:
             path_points.append(pygame.Vector2(path_origin_x + point['x'], path_origin_y + point['y']))
 
-        print(path_points)
         self.__map_path = Path(path_points, 15)
-
         tileset_image = pygame.image.load('assets/field/tiles/FieldsTileset.png')
         tile_amount_x = tileset_image.get_size()[0] // 32
         tile_amount_y = tileset_image.get_size()[1] // 32

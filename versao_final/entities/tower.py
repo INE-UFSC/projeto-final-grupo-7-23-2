@@ -30,7 +30,6 @@ class Tower(Entity):
         if current_time - self.__last_shoot > self.__cooldown * 1000:
             self.__bullets_list.append(Bullet(self.get_position() - self.__aim_vector, self.__target, self.__damage))
             self.__last_shoot = current_time
-            print('atirando')
 
     def update(self, delta_time: float) -> None:
         vector = self.get_position() - self.__target.get_position()
