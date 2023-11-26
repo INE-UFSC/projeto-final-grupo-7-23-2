@@ -36,6 +36,7 @@ class Map(Drawable):
             for col in range(tile_amount_y):
                 tileset.append(tileset_image.subsurface(col * 32.0, row * 32.0, 32.0, 32.0))
 
+        # TODO: criar uma classe Tile
         self.__tile_array: list[list[pygame.Surface]] = [[None for __ in range(layout_width)] for _ in range(layout_height)]
         for i, tile in enumerate(layout):
             line_number = i // layout_width
