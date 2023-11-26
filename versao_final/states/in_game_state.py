@@ -7,28 +7,31 @@ import states.state as state
 import game
 
 from levels.map import Map
-from versao_final.entities.enemy import Enemy
+from factories.tower_factory import TowerFactory
+from entities.enemy import Enemy
 from entities.tower import Tower
+from entities.projectile import Projectile
 from entities.player_base import PlayerBase
+from singletons.constants import Constants as C
+
 import states.UI.menu_ui as menu_ui
+
 
 class InGameState(state.State):
     def __init__(self, context: game.Game, level_number: int):
+        # FIX: alterar menuUI para ingameUI quando for criado
         state.State.__init__(self, context, menu_ui.MenuUI(context) )
 
         self.__map = Map(level_number)
         path = self.__map.get_path()
-        self.player_base = PlayerBase(path.get_end() + pygame.Vector2(40, 0))
-        self.enemy = Enemy(path)
-        self.towers = [
-            Tower(pygame.Vector2(450, 300), 250, self.enemy, 50, self.bullets),
-            Tower(pygame.Vector2(770, 300), 250, self.enemy, 50, self.bullets),
-            Tower(pygame.Vector2(1245, 300), 250, self.enemy, 50, self.bullets),
-            Tower(pygame.Vector2(980, 660), 250, self.enemy, 50, self.bullets)
-        ]
+        self.__player_base = PlayerBase(path.get_end() + pygame.Vector2(40, 0))
+        self.__enemy = Enemy(path)
 
-        self.drawables: list[Drawable] = [path, self.player_base, self.enemy, *self.towers]
         self.__projectiles: list[Projectile] = []
+        self.__tower_factory = TowerFactory(self.__enemy, 50, 75, 1.5, 50, self.__projectiles)
+        self.__towers: list[Tower] = []
+
+        self.__place_tower = False
 
     def handle_input(self) -> None:
         for event in pygame.event.get():
@@ -38,7 +41,16 @@ class InGameState(state.State):
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
-                    print(pygame.mouse.get_pos())
+                    c = C()
+                    position = pygame.mouse.get_pos()
+                    tile_x = position[0] // c.get_tile_size() * c.get_tile_size() + c.get_tile_size() / 2
+                    tile_y = position[1] // c.get_tile_size() * c.get_tile_size() + c.get_tile_size() / 2
+                    new_tower_position = pygame.Vector2(tile_x, tile_y)
+
+                    self.__towers.append(self.__tower_factory.create_tower(new_tower_position))
+
+                elif event.button == pygame.BUTTON_RIGHT:
+                    self.__tower_factory.upgrade()
 
             elif event.type == pygame.QUIT:
                 self.get_ctx().exit_game()
@@ -58,6 +70,12 @@ class InGameState(state.State):
                 #     pygame.quit()
                 #     sys.exit()
 
+        # if self.__place_tower:
+        #     self.__place_tower = False
+        #     new_tower = Tower(pygame.Vector2(pygame.mouse.get_pos()), 250, self.__enemy, 50, self.__projectiles)
+        #     self.__towers.append(new_tower)
+        #     self.__drawables.append(new_tower)
+
         # if self.enemy.finished_path():
         #     print('inimigo chegou na base')
         #     pygame.quit()
@@ -68,8 +86,6 @@ class InGameState(state.State):
 
         self.__map.draw_at(screen)
 
-        for drawable in self.drawables:
-            drawable.draw_at(screen)
         for tower in self.__towers:
             tower.draw_at(screen)
 
