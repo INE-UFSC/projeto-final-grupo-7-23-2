@@ -2,20 +2,20 @@ import pygame
 
 from entities.entity import Entity
 from entities.enemy import Enemy
-from entities.bullet import Bullet
+from entities.projectile import Projectile
 
 
 class Tower(Entity):
-    def __init__(self, position: pygame.Vector2, range: float, target: Enemy, damage: int, bullets_list: list[Bullet]):
+    def __init__(self, position: pygame.Vector2, range: float, target: Enemy, damage: float, shoot_rate: float, bullets_list: list[Projectile]):
         Entity.__init__(self, position)
         self.__state = self.watching_target
         self.__range = range
         self.__target: Enemy = target
+        self.__shoot_rate = shoot_rate
         self.__damage = damage
         self.__bullets_list = bullets_list
         self.__angle: float
         self.__aim_vector = pygame.Vector2(0, 0)
-        self.__cooldown = 0.7
         self.__last_shoot = 0.0
 
     def watching_target(self) -> None:
@@ -27,8 +27,8 @@ class Tower(Entity):
             self.__state = self.watching_target
 
         current_time = pygame.time.get_ticks()
-        if current_time - self.__last_shoot > self.__cooldown * 1000:
-            self.__bullets_list.append(Bullet(self.get_position() - self.__aim_vector, self.__target, self.__damage))
+        if current_time - self.__last_shoot > (1 / self.__shoot_rate) * 1000:
+            self.__bullets_list.append(Projectile(self.get_position() - self.__aim_vector, self.__target, self.__damage))
             self.__last_shoot = current_time
 
     def update(self, delta_time: float) -> None:

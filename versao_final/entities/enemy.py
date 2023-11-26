@@ -61,7 +61,7 @@ class Enemy(Entity):
     def finished_path(self) -> bool:
         return self.__finished_path
 
-    def take_damage(self, damage: int) -> None:
+    def take_damage(self, damage: float) -> None:
         self.__health -= damage
         if self.__health <= 0:
             self.__is_alive = False
