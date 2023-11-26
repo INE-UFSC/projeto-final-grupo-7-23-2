@@ -2,7 +2,6 @@ import pygame
 
 from entities.entity import Entity
 from entities.enemy import Enemy
-from entities.bullet import Bullet
 
 
 class Tower(Entity):

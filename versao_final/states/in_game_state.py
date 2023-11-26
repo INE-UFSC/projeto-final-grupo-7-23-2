@@ -9,7 +9,6 @@ import game
 from levels.map import Map
 from versao_final.entities.enemy import Enemy
 from entities.tower import Tower
-from entities.bullet import Bullet
 from entities.player_base import PlayerBase
 import states.UI.menu_ui as menu_ui
 
@@ -21,7 +20,6 @@ class InGameState(state.State):
         path = self.__map.get_path()
         self.player_base = PlayerBase(path.get_end() + pygame.Vector2(40, 0))
         self.enemy = Enemy(path)
-        self.bullets: list[Bullet] = []
         self.towers = [
             Tower(pygame.Vector2(450, 300), 250, self.enemy, 50, self.bullets),
             Tower(pygame.Vector2(770, 300), 250, self.enemy, 50, self.bullets),
@@ -30,6 +28,7 @@ class InGameState(state.State):
         ]
 
         self.drawables: list[Drawable] = [path, self.player_base, self.enemy, *self.towers]
+        self.__projectiles: list[Projectile] = []
 
     def handle_input(self) -> None:
         for event in pygame.event.get():
@@ -45,15 +44,15 @@ class InGameState(state.State):
                 self.get_ctx().exit_game()
 
     def update(self, delta_time: float) -> None:
-        self.enemy.update(delta_time)
-        for tower in self.towers:
+        self.__enemy.update(delta_time)
+        for tower in self.__towers:
             tower.update(delta_time)
 
-        for bullet in self.bullets:
+        for bullet in self.__projectiles:
             bullet.update(delta_time)
-            if bullet.get_position().distance_to(self.enemy.get_position()) < 10:
-                self.bullets.remove(bullet)
-                self.enemy.take_damage(bullet.get_damage())
+            if bullet.get_position().distance_to(self.__enemy.get_position()) < 10:
+                self.__projectiles.remove(bullet)
+                self.__enemy.take_damage(bullet.get_damage())
                 # if not self.enemy.is_alive():
                 #     print('inimigo morreu')
                 #     pygame.quit()
@@ -71,7 +70,12 @@ class InGameState(state.State):
 
         for drawable in self.drawables:
             drawable.draw_at(screen)
+        for tower in self.__towers:
+            tower.draw_at(screen)
 
-        for bullet in self.bullets:
+        self.__enemy.draw_at(screen)
+        self.__player_base.draw_at(screen)
+
+        for bullet in self.__projectiles:
             bullet.draw_at(screen)
 

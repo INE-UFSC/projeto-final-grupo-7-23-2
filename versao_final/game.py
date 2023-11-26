@@ -44,7 +44,7 @@ class Game():
 
     def get_screen(self) -> pygame.Surface:
         return self.__screen
-    
+
     def exit_game(self):
         pygame.quit()
         sys.exit()
