@@ -60,11 +60,11 @@ class InGameState(state.State):
         for tower in self.__towers:
             tower.update(delta_time)
 
-        for bullet in self.__projectiles:
-            bullet.update(delta_time)
-            if bullet.get_position().distance_to(self.__enemy.get_position()) < 10:
-                self.__projectiles.remove(bullet)
-                self.__enemy.take_damage(bullet.get_damage())
+        for projectile in self.__projectiles:
+            projectile.update(delta_time)
+            if projectile.get_position().distance_to(self.__enemy.get_position()) < 10:
+                self.__projectiles.remove(projectile)
+                self.__enemy.take_damage(projectile.get_damage())
                 # if not self.enemy.is_alive():
                 #     print('inimigo morreu')
                 #     pygame.quit()
@@ -92,6 +92,6 @@ class InGameState(state.State):
         self.__enemy.draw_at(screen)
         self.__player_base.draw_at(screen)
 
-        for bullet in self.__projectiles:
-            bullet.draw_at(screen)
+        for projectile in self.__projectiles:
+            projectile.draw_at(screen)
 
