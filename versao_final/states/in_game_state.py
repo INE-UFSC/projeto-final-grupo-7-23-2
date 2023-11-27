@@ -7,7 +7,7 @@ import states.state as state
 import game
 
 from levels.map import Map
-from versao_final.entities.enemy import Enemy
+from versao_final.entities.enemies.enemy import Enemy
 from entities.tower import Tower
 from entities.bullet import Bullet
 from entities.player_base import PlayerBase

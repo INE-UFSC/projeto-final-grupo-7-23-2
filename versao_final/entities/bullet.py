@@ -1,7 +1,7 @@
 import pygame
 
 from entities.entity import Entity
-from entities.enemy import Enemy
+from entities.enemies.enemy import Enemy
 
 
 class Bullet(Entity):
