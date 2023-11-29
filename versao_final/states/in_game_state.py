@@ -1,8 +1,6 @@
 from __future__ import annotations
 import pygame
 
-from drawable import Drawable
-
 import states.state as state
 import game
 
@@ -28,7 +26,7 @@ class InGameState(state.State):
         self.__enemy = Enemy(path)
 
         self.__projectiles: list[Projectile] = []
-        self.__tower_factory = TowerFactory(self.__enemy, 50, 75, 1.5, 50, self.__projectiles)
+        self.__tower_factory = TowerFactory(50, 75, 1.5, 50, self.__projectiles)
         self.__towers: list[Tower] = []
 
         self.__place_tower = False
@@ -47,7 +45,7 @@ class InGameState(state.State):
                     tile_y = position[1] // c.get_tile_size() * c.get_tile_size() + c.get_tile_size() / 2
                     new_tower_position = pygame.Vector2(tile_x, tile_y)
 
-                    self.__towers.append(self.__tower_factory.create_tower(new_tower_position))
+                    self.__towers.append(self.__tower_factory.create_tower(self.__enemy, new_tower_position))
 
                 elif event.button == pygame.BUTTON_RIGHT:
                     self.__tower_factory.upgrade()

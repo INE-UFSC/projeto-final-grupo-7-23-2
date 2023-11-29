@@ -25,7 +25,7 @@ class GameOverUI(UI):
         self.background = pygame.image.load('assets/backgrounds/basic_background.png')
     
     def draw_at(self, screen):
-        screen.blit(self.background, self.background.get_rect(center = (C().get_width()/2,C().get_height()/2)))
-        screen.blit(self.title, self.title.get_rect(center=(C().get_width()/2,50)))
+        screen.blit(self.background, self.background.get_rect(center = (C().get_screen_width()/2,C().get_screen_height()/2)))
+        screen.blit(self.title, self.title.get_rect(center=(C().get_screen_width()/2,50)))
         for button in self.buttons:
             button.draw_at(screen)
