@@ -11,13 +11,13 @@ from entities.projectile import Projectile
 from entities.player_base import PlayerBase
 from shop import Shop
 
-import states.UI.menu_ui as menu_ui
+import states.UI.in_game_ui as in_game_ui
 
 
 class InGameState(state.State):
     def __init__(self, context: game.Game, level_number: int):
         # FIX: alterar menuUI para ingameUI quando for criado
-        state.State.__init__(self, context, menu_ui.MenuUI(context) )
+        state.State.__init__(self, context, in_game_ui.InGameUI(context) )
 
         self.__map = Map(level_number)
         path = self.__map.get_path()
@@ -90,6 +90,8 @@ class InGameState(state.State):
 
         for projectile in self.__projectiles:
             projectile.draw_at(screen)
+        
+        self.UI.draw_at(screen)
     
     def get_projectiles(self) -> list[Projectile]:
         return self.__projectiles
