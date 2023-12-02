@@ -10,14 +10,15 @@ from entities.tower import Tower
 from entities.projectile import Projectile
 from entities.player_base import PlayerBase
 from shop import Shop
-
-import states.UI.in_game_ui as in_game_ui
+from buttons.text_button import TextButton
+from singletons.constants import Constants as C
+import states.game_over_state as game_over_state
 
 
 class InGameState(state.State):
     def __init__(self, context: game.Game, level_number: int):
         # FIX: alterar menuUI para ingameUI quando for criado
-        state.State.__init__(self, context, in_game_ui.InGameUI(context) )
+        state.State.__init__(self, context )
 
         self.__map = Map(level_number)
         path = self.__map.get_path()
@@ -28,6 +29,19 @@ class InGameState(state.State):
         self.__towers: list[Tower] = []
         self.__shop = Shop(self, 100 * (level_number + 1))
         self.__place_tower = False
+
+        width = C().get_screen_width()
+        height = C().get_screen_height()
+        self.buttons = [
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/25, height/4.6, width/15, height/35, lambda: print(1)), #COMPRAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/25, height/4, width/15, height/35, lambda: context.get_state().upgrade()), #APRIMORAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/8, height/4.6, width/15, height/35, lambda: print(3)), #COMPRAR TORRE 2
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/8, height/4, width/15, height/35, lambda: print(4)), #APRIMORAR TORRE 2
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Pausa', True, 'black'),'#FF5C00', width/5, height/4.6, width/15, height/35, lambda: print(5)), #PAUSAR
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Desistir', True, 'black'),'#FF0000', width/5, height/4, width/15, height/35, lambda: context.change_state(game_over_state.GameOverState(context))) #DESISTIR
+        ]
+        self.shop_title = pygame.font.Font(C().get_font('Pixeltype.ttf'),40).render('Loja',True, 'black')
+        self.total_money = pygame.font.Font(C().get_font('Pixeltype.ttf'), 35).render('$1000',True, 'black')
 
     def handle_input(self) -> None:
         for event in pygame.event.get():
@@ -44,6 +58,7 @@ class InGameState(state.State):
                         if self.__shop.can_buy_tower():
                             self.__towers.append(self.__shop.buy_tower(self.__enemy, position))
                         self.__place_tower = False
+                    self.check_buttons(pygame.mouse.get_pos())
 
                 elif event.button == pygame.BUTTON_RIGHT:
                     self.__tower_factory.upgrade()
@@ -91,7 +106,27 @@ class InGameState(state.State):
         for projectile in self.__projectiles:
             projectile.draw_at(screen)
         
-        self.UI.draw_at(screen)
+        self.draw_at(screen)
+    
+    def draw_at(self, screen: pygame.Surface):
+        #constantes dimensionais
+        width = C().get_screen_width()
+        height = C().get_screen_height()
+
+        pygame.draw.rect(screen, '#A3A3A3',pygame.Rect(0,0, width/4, height/3.5), border_bottom_right_radius=10) #retângulo maior
+        pygame.draw.rect(screen, 'black',pygame.Rect(0,0, width/4, height/3.5), 3, border_bottom_right_radius=10 ) #contorno do círculo maior
+
+        screen.blit(self.shop_title, self.shop_title.get_rect(center=(width/8, height/30)))
+        screen.blit(self.total_money, self.total_money.get_rect(center=(width/5, height/8)))
+
+        pygame.draw.circle(screen, '#D9D9D9', (width/25, height/8), 37.5) #círculo 1
+        pygame.draw.circle(screen, 'black', (width/25, height/8), 37.5, 2) #contorno do círculo 1
+
+        pygame.draw.circle(screen, '#D9D9D9', (width/8, height/8), 37.5) #círculo 2
+        pygame.draw.circle(screen, 'black', (width/8, height/8), 37.5, 2) #contorno do círculo 2
+
+        for button in self.buttons:
+            button.draw_at(screen)
     
     def get_projectiles(self) -> list[Projectile]:
         return self.__projectiles

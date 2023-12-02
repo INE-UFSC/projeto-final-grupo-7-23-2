@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from states.UI.ui import UI
+from buttons.button import Button
 import game
 
 
 class State(ABC):
-    def __init__(self, context: game.Game, UI: UI):
+    def __init__(self, context: game.Game):
         self.__context = context
-        self.UI = UI
-        self.buttons = UI.buttons
+        self.buttons = list[Button]
 
     def get_ctx(self):
         return self.__context
@@ -19,7 +18,11 @@ class State(ABC):
         pass
 
     def render(self):
-        self.UI.draw_at(self.get_ctx().get_screen())
+        self.draw_at(self.get_ctx().get_screen())
+    
+    @abstractmethod
+    def draw_at(self):
+        pass
 
     def check_buttons(self, mouse_pos): #the Game class will give us the mouse position upon calling this function
         for button in self.buttons:
