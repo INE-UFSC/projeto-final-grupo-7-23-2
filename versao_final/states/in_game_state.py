@@ -5,12 +5,11 @@ import states.state as state
 import game
 
 from levels.map import Map
-from factories.tower_factory import TowerFactory
 from entities.enemy import Enemy
 from entities.tower import Tower
 from entities.projectile import Projectile
 from entities.player_base import PlayerBase
-from singletons.constants import Constants as C
+from shop import Shop
 
 import states.UI.menu_ui as menu_ui
 
@@ -26,9 +25,8 @@ class InGameState(state.State):
         self.__enemy = Enemy(path)
 
         self.__projectiles: list[Projectile] = []
-        self.__tower_factory = TowerFactory(50, 75, 1.5, 50, self.__projectiles)
         self.__towers: list[Tower] = []
-
+        self.__shop = Shop(self, 100 * (level_number + 1))
         self.__place_tower = False
 
     def handle_input(self) -> None:
@@ -36,16 +34,16 @@ class InGameState(state.State):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.get_ctx().exit_game()
+                elif event.key == pygame.K_p:
+                    self.__place_tower = True
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
-                    c = C()
-                    position = pygame.mouse.get_pos()
-                    tile_x = position[0] // c.get_tile_size() * c.get_tile_size() + c.get_tile_size() / 2
-                    tile_y = position[1] // c.get_tile_size() * c.get_tile_size() + c.get_tile_size() / 2
-                    new_tower_position = pygame.Vector2(tile_x, tile_y)
-
-                    self.__towers.append(self.__tower_factory.create_tower(self.__enemy, new_tower_position))
+                    if self.__place_tower:
+                        position = pygame.mouse.get_pos()
+                        if self.__shop.can_buy_tower():
+                            self.__towers.append(self.__shop.buy_tower(self.__enemy, position))
+                        self.__place_tower = False
 
                 elif event.button == pygame.BUTTON_RIGHT:
                     self.__tower_factory.upgrade()
@@ -92,4 +90,6 @@ class InGameState(state.State):
 
         for projectile in self.__projectiles:
             projectile.draw_at(screen)
-
+    
+    def get_projectiles(self) -> list[Projectile]:
+        return self.__projectiles
