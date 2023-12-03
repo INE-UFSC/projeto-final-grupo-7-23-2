@@ -5,10 +5,7 @@ import random
 
 class Bee(Enemy):
     def __init__(self, path: Path):
-        super().__init__(path)
-        self.__speed = 170
-        self.__health = 180
-        self.__image = pygame.transform.flip (pygame.image.load('assets/entities/enemies/bee/basic_bee.png'), True, False)
+        super().__init__(path, 180.0, 170.0, pygame.transform.flip(pygame.image.load('assets/entities/enemies/bee/basic_bee.png'), True, False))
 
     def take_damage(self, damage: int) -> None:
         chance = random.randint(1,4)

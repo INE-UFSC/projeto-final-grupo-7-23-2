@@ -4,12 +4,12 @@ from entities.entity import Entity
 from path import Path
 
 class Enemy(Entity):
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, health: float, speed: float, image: pygame.Surface ):
         Entity.__init__(self, path.get_start())
         self.__path = path
         self.__state = "follow_path"
         self.__finished_path = False
-        self.__health = 500
+        self.__health = health
         self.__is_alive = True
 
         if len(self.__path.get_points()) < 2 :
@@ -17,9 +17,9 @@ class Enemy(Entity):
 
         self.__current_point = self.__path.get_points()[1]
         self.__current_point_index = 1
-        self.__speed = 100.0
+        self.__speed = speed
         self.__velocity = pygame.Vector2(0, 0)
-        self.__image: pygame.Surface
+        self.__image = image
 
     def update(self, delta_time: float) -> None:
         if self.__state == "follow_path":

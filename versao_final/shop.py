@@ -1,7 +1,7 @@
 import pygame
 from factories.tower_factory import TowerFactory
 from singletons.constants import Constants as C
-from entities.enemy import Enemy
+from entities.enemies.enemy import Enemy
 from states.state import State
 
 class Shop:

@@ -1,7 +1,7 @@
 import pygame
 
 from entities.tower import Tower
-from entities.enemy import Enemy
+from entities.enemies.enemy import Enemy
 from entities.projectile import Projectile
 
 '''
