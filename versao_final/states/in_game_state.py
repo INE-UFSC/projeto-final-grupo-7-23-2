@@ -30,14 +30,17 @@ class InGameState(state.State):
         self.__shop = Shop(self, 100 * (level_number + 1))
         self.__place_tower = False
 
+        self.__paused = False
+
         width = C().get_screen_width()
         height = C().get_screen_height()
+
         self.buttons = [
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/25, height/4.6, width/15, height/35, lambda: print(1)), #COMPRAR TORRE 1
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/25, height/4, width/15, height/35, lambda: context.get_state().upgrade()), #APRIMORAR TORRE 1
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/8, height/4.6, width/15, height/35, lambda: print(3)), #COMPRAR TORRE 2
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/8, height/4, width/15, height/35, lambda: print(4)), #APRIMORAR TORRE 2
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Pausa', True, 'black'),'#FF5C00', width/5, height/4.6, width/15, height/35, lambda: print(5)), #PAUSAR
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/25, height/4.6, width/15, height/35, lambda: self.buy_tower()), #COMPRAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/25, height/4, width/15, height/35, lambda: self.__shop.upgrade()), #APRIMORAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/8, height/4.6, width/15, height/35, lambda: self.buy_tower()), #COMPRAR TORRE 2
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/8, height/4, width/15, height/35, lambda: self.__shop.upgrade()), #APRIMORAR TORRE 2
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Pausa', True, 'black'),'#FF5C00', width/5, height/4.6, width/15, height/35, lambda: self.pause()), #PAUSAR
             TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Desistir', True, 'black'),'#FF0000', width/5, height/4, width/15, height/35, lambda: context.change_state(game_over_state.GameOverState(context))) #DESISTIR
         ]
         self.shop_title = pygame.font.Font(C().get_font('Pixeltype.ttf'),40).render('Loja',True, 'black')
@@ -49,14 +52,14 @@ class InGameState(state.State):
                 if event.key == pygame.K_ESCAPE:
                     self.get_ctx().exit_game()
                 elif event.key == pygame.K_p:
-                    self.__place_tower = True
+                    print(self.__shop.get_money())
+                    self.buy_tower()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
-                    if self.__place_tower:
+                    if self.__place_tower and not self.__paused:
                         position = pygame.mouse.get_pos()
-                        if self.__shop.can_buy_tower():
-                            self.__towers.append(self.__shop.buy_tower(self.__enemy, position))
+                        self.__towers.append(self.__shop.add_tower(self.__enemy, position))
                         self.__place_tower = False
                     self.check_buttons(pygame.mouse.get_pos())
 
@@ -67,15 +70,16 @@ class InGameState(state.State):
                 self.get_ctx().exit_game()
 
     def update(self, delta_time: float) -> None:
-        self.__enemy.update(delta_time)
-        for tower in self.__towers:
-            tower.update(delta_time)
+        if not self.__paused:
+            self.__enemy.update(delta_time)
+            for tower in self.__towers:
+                tower.update(delta_time)
 
-        for projectile in self.__projectiles:
-            projectile.update(delta_time)
-            if projectile.get_position().distance_to(self.__enemy.get_position()) < 10:
-                self.__projectiles.remove(projectile)
-                self.__enemy.take_damage(projectile.get_damage())
+            for projectile in self.__projectiles:
+                projectile.update(delta_time)
+                if projectile.get_position().distance_to(self.__enemy.get_position()) < 10:
+                    self.__projectiles.remove(projectile)
+                    self.__enemy.take_damage(projectile.get_damage())
                 # if not self.enemy.is_alive():
                 #     print('inimigo morreu')
                 #     pygame.quit()
@@ -128,5 +132,14 @@ class InGameState(state.State):
         for button in self.buttons:
             button.draw_at(screen)
     
+    def buy_tower(self):
+        if self.__shop.can_buy_tower():
+            self.__shop.buy_tower()
+            self.__place_tower = True
+    
+    def pause(self):
+        self.__paused = not self.__paused
+    
     def get_projectiles(self) -> list[Projectile]:
         return self.__projectiles
+    
