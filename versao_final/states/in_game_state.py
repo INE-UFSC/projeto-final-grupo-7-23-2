@@ -5,7 +5,7 @@ import states.state as state
 import game
 
 from levels.map import Map
-from entities.enemy import Enemy
+from entities.enemies.enemy import Enemy
 from entities.tower import Tower
 from entities.projectile import Projectile
 from entities.player_base import PlayerBase

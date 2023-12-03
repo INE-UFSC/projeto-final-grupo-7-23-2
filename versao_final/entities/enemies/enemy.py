@@ -19,6 +19,7 @@ class Enemy(Entity):
         self.__current_point_index = 1
         self.__speed = 100.0
         self.__velocity = pygame.Vector2(0, 0)
+        self.__image: pygame.Surface
 
     def update(self, delta_time: float) -> None:
         if self.__state == "follow_path":
@@ -47,7 +48,7 @@ class Enemy(Entity):
         self.__velocity = pygame.Vector2(0, 0)
 
     def draw_at(self, screen: pygame.Surface) -> None:
-        pygame.draw.circle(screen, (255, 0, 0), self.get_position(), 10)
+       screen.blit(self.get_image(), self.get_image().get_rect(center=self.get_position()))
 
     def get_velocity(self) -> pygame.Vector2:
         return self.__velocity
@@ -68,3 +69,6 @@ class Enemy(Entity):
 
     def is_alive(self) -> bool:
         return self.__is_alive
+    
+    def get_image(self) -> pygame.Surface:
+        return self.__image
