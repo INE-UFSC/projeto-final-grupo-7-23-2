@@ -35,13 +35,17 @@ class InGameState(state.State):
         width = C().get_screen_width()
         height = C().get_screen_height()
 
+        click_sound = pygame.mixer.Sound(C().get_sound('basic_click.wav'))
+        buy_sound = pygame.mixer.Sound(C().get_sound('buy_sound.wav'))
+        upgrade_sound = pygame.mixer.Sound(C().get_sound('upgrade_sound.wav'))
+
         self.buttons = [
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/25, height/4.6, width/15, height/35, lambda: self.buy_tower()), #COMPRAR TORRE 1
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/25, height/4, width/15, height/35, lambda: self.__shop.upgrade()), #APRIMORAR TORRE 1
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/8, height/4.6, width/15, height/35, lambda: self.buy_tower()), #COMPRAR TORRE 2
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/8, height/4, width/15, height/35, lambda: self.__shop.upgrade()), #APRIMORAR TORRE 2
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Pausa', True, 'black'),'#FF5C00', width/5, height/4.6, width/15, height/35, lambda: self.pause()), #PAUSAR
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Desistir', True, 'black'),'#FF0000', width/5, height/4, width/15, height/35, lambda: context.change_state(game_over_state.GameOverState(context))) #DESISTIR
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/25, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower()), #COMPRAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/25, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade()), #APRIMORAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/8, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower()), #COMPRAR TORRE 2
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/8, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade()), #APRIMORAR TORRE 2
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Pausa', True, 'black'),'#FF5C00', width/5, height/4.6, width/15, height/35, click_sound, lambda: self.pause()), #PAUSAR
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Desistir', True, 'black'),'#FF0000', width/5, height/4, width/15, height/35, click_sound, lambda: context.change_state(game_over_state.GameOverState(context))) #DESISTIR
         ]
         self.shop_title = pygame.font.Font(C().get_font('Pixeltype.ttf'),40).render('Loja',True, 'black')
         self.total_money = pygame.font.Font(C().get_font('Pixeltype.ttf'), 35).render('$1000',True, 'black')

@@ -16,17 +16,21 @@ class GameOverState(state.State):
 
         self.title= pygame.font.Font('assets/fonts/OldeEnglish.ttf',80).render('Jogo finalizado', True, 'black')
 
+        click_sound = pygame.mixer.Sound(C().get_sound('basic_click.wav'))
+
         self.buttons = [
                TextButton(pygame.font.Font(
                    C().get_font('Pixeltype.ttf'),60)
                    .render('Sair',True,'black'),
                    'red', width/2, height/3, width/11, height/14,
+                   click_sound,
                    lambda: self.get_ctx().exit_game()),
 
                TextButton(pygame.font.Font(
                    C().get_font('Pixeltype.ttf'),60)
                    .render('Jogar novamente',True,'black'),
                    'green',width/2, 1.5*height/3, 3*width/11, height/14,
+                   click_sound,
                    lambda: context.change_state(level_select_state.LevelSelectState(context)))
         ]
 

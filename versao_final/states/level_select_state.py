@@ -13,29 +13,35 @@ class LevelSelectState(State):
     def __init__(self, context: game.Game):
         super().__init__(context)
 
+        click_sound = pygame.mixer.Sound(C().get_sound('basic_click.wav'))
+
         self.buttons = [ 
                 TextButton(
                     pygame.font.Font(C().get_font('Pixeltype.ttf'), 42).render('Fase 1', True, 'black'),
                     'green',
                     C().get_screen_width()/4, C().get_screen_height()/3, 95, 35,
+                    click_sound,
                     lambda: context.change_state(in_game_state.InGameState(context, 0))
                 ),
                 TextButton(
                     pygame.font.Font(C().get_font('Pixeltype.ttf'), 42).render('Fase 2', True, 'black'),
                     'green',
                     2 * C().get_screen_width() / 4, C().get_screen_height() / 3, 95, 35,
+                    click_sound,
                     lambda: context.change_state(in_game_state.InGameState(context, 1))
                 ),
                 TextButton(
                     pygame.font.Font(C().get_font('Pixeltype.ttf'), 42).render('Fase 3', True, 'black'),
                     'green',
                     3 * C().get_screen_width() / 4, C().get_screen_height() / 3, 95, 35,
+                    click_sound,
                     lambda: context.change_state(in_game_state.InGameState(context, 2))
                 ),
                 TextButton(
                     pygame.font.Font(C().get_font('Pixeltype.ttf'), 42).render('Retornar', True, 'black'),
                     'red',
                     C().get_screen_width() / 2, 2 * C().get_screen_height() / 3, 140, 35,
+                    click_sound,
                     lambda: context.change_state(menu_state.MenuState(context))
                 )
             ]

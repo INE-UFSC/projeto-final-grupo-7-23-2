@@ -14,12 +14,15 @@ class MenuState(state.State):
     def __init__(self, context: game.Game):
         state.State.__init__(self, context)
 
+        click_sound = pygame.mixer.Sound(C().get_sound('basic_click.wav'))
+
         self.buttons = [
             TextButton(
                 pygame.font.Font(C().get_font('Pixeltype.ttf'), 60).render('Jogar', True, 'black'),
                 'green',
                 C().get_screen_width() / 2, C().get_screen_height() / 4,
                 125, 55,
+                click_sound,
                 lambda: self.get_ctx().change_state(level_select_state.LevelSelectState(context))
             ),
             TextButton(
@@ -27,6 +30,7 @@ class MenuState(state.State):
                 'cyan',
                 C().get_screen_width() / 2, 1.75 * C().get_screen_height() / 4,
                 230, 55,
+                click_sound,
                 lambda: self.get_ctx().change_state(instructions_state.InstructionsState(context))
             ),
             TextButton(
@@ -34,6 +38,7 @@ class MenuState(state.State):
                 'red',
                 C().get_screen_width() / 2, 2.5 * C().get_screen_height() / 4,
                 105, 55,
+                click_sound,
                 lambda: self.get_ctx().exit_game()
             )
         ]

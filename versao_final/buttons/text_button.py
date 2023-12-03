@@ -3,8 +3,8 @@ from buttons.button import Button
 from typing import Callable
 
 class TextButton(Button):
-    def __init__(self, text: pygame.Surface, color: str, centerx, centery, width: int, height: int, action: Callable) -> None:
-        super().__init__(color, centerx, centery, width, height, action)
+    def __init__(self, text: pygame.Surface, color: str, centerx, centery, width: int, height: int, sound, action: Callable) -> None:
+        super().__init__(color, centerx, centery, width, height, sound, action)
         self.text = text
 
     def draw_at(self, screen):

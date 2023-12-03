@@ -14,8 +14,10 @@ class InstructionsState(state.State):
     def __init__(self, context: game.Game):
         super().__init__(context)
 
+        click_sound = pygame.mixer.Sound(C().get_sound('basic_click.wav'))
+
         self.buttons = [
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),42).render('Retornar',True,'black'),'red',C().get_screen_width()/2,2*C().get_screen_height()/3,140,35, lambda: context.change_state(menu_state.MenuState(context)))
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),42).render('Retornar',True,'black'),'red',C().get_screen_width()/2,2*C().get_screen_height()/3,140,35, click_sound, lambda: context.change_state(menu_state.MenuState(context)))
         ]
         self.title= pygame.font.Font(C().get_font('Pixeltype.ttf'),80).render('Como Jogar', True, 'black')
         self.background = pygame.image.load('assets/backgrounds/basic_background.png')
