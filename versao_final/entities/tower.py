@@ -2,7 +2,7 @@ import pygame
 
 from entities.entity import Entity
 from entities.enemies.enemy import Enemy
-from entities.bullet import Bullet
+from entities.projectile import Projectile
 from singletons.constants import Constants as C
 
 
