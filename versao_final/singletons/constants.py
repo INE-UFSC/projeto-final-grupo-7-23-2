@@ -14,6 +14,9 @@ class Constants(Singleton):
 
     def get_font(self,font):
         return f'assets/fonts/{font}'
+    
+    def get_sound(self, sound):
+        return f'assets/sounds/{sound}'
 
     def get_screen_width(self):
         return self.__width

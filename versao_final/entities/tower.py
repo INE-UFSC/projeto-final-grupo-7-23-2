@@ -3,6 +3,7 @@ import pygame
 from entities.entity import Entity
 from entities.enemy import Enemy
 from entities.projectile import Projectile
+from singletons.constants import Constants as C
 
 
 class Tower(Entity):
@@ -17,6 +18,8 @@ class Tower(Entity):
         self.__angle: float
         self.__aim_vector = pygame.Vector2(0, 0)
         self.__last_shoot = 0.0
+        self.build_sound = pygame.mixer.Sound(C().get_sound('build_tower.wav'))
+        self.build_sound.play()
 
     def watching_target(self) -> None:
         if self.get_position().distance_to(self.__target.get_position()) < self.__range:
