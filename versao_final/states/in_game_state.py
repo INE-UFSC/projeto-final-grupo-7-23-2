@@ -45,9 +45,9 @@ class InGameState(state.State):
                     position = pygame.mouse.get_pos()
                     tile_x = position[0] // c.get_tile_size() * c.get_tile_size() + c.get_tile_size() / 2
                     tile_y = position[1] // c.get_tile_size() * c.get_tile_size() + c.get_tile_size() / 2
-                    new_tower_position = pygame.Vector2(tile_x, tile_y)
+                    tower_position = pygame.Vector2(tile_x, tile_y)
 
-                    self.__towers.append(self.__tower_factory.create_tower(new_tower_position))
+                    self.__towers.append(self.__tower_factory.create_tower(tower_position))
 
                 elif event.button == pygame.BUTTON_RIGHT:
                     self.__tower_factory.upgrade()
