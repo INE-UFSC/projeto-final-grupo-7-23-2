@@ -13,16 +13,17 @@ Assim, ao invés de aprimorar os atributos de uma instância específica de torr
 # A ideia é que classes filhas sejam feitas a partir dessa, cada uma criando uma classe-filha
 # de torre diferente (Factory Method Design Pattern)
 class TowerFactory:
-    def __init__(self, tower_dmg: float, tower_range: float, tower_shoot_rate: float, tower_price: float, projectiles_ref: list[Projectile], upgrade_price: float):
+    def __init__(self, tower_dmg: float, tower_range: float, tower_shoot_rate: float, tower_price: float, upgrade_price: float, projectiles_ref: list[Projectile], enemies_ref: list[Enemy]):
         self.__tower_dmg = tower_dmg
         self.__tower_range = tower_range
         self.__tower_price = tower_price
+        self.__upgrade_price = upgrade_price
         self.__shoot_rate = tower_shoot_rate
         self.__projectiles_ref = projectiles_ref
-        self.__upgrade_price = upgrade_price
+        self.__enemies_ref = enemies_ref
 
-    def create_tower(self,target: Enemy, position: pygame.Vector2):
-        return Tower(position, self.__tower_range, target, self.__tower_dmg, self.__shoot_rate, self.__projectiles_ref)
+    def create_tower(self, position: pygame.Vector2):
+        return Tower(position, self.__tower_range, self.__tower_dmg, self.__shoot_rate, self.__projectiles_ref, self.__enemies_ref)
 
     def upgrade(self):
         self.__tower_dmg *= 1.5

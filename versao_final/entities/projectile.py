@@ -8,7 +8,7 @@ class Projectile(Entity):
     def __init__(self, position: pygame.Vector2, target: Enemy, damage: float):
         Entity.__init__(self, position)
         self.__velocity: pygame.Vector2
-        self.__speed = 50
+        self.__speed = 250
         self.__target = target
         self.__damage = damage
     def update(self, delta_time: float) -> None:
@@ -20,3 +20,6 @@ class Projectile(Entity):
 
     def get_damage(self) -> float:
         return self.__damage
+    
+    def get_target(self):
+        return self.__target

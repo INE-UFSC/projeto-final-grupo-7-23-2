@@ -6,6 +6,7 @@ import game
 
 from levels.map import Map
 from entities.enemies.wolf import Wolf
+from entities.enemies.enemy import Enemy
 from entities.tower import Tower
 from entities.projectile import Projectile
 from entities.player_base import PlayerBase
@@ -22,8 +23,7 @@ class InGameState(state.State):
         self.__map = Map(level_number)
         path = self.__map.get_path()
         self.__player_base = PlayerBase(path.get_end() + pygame.Vector2(40, 0))
-        self.__enemy = Wolf(path)
-
+        self.__enemies: list[Enemy] = [Wolf(path)]
         self.__projectiles: list[Projectile] = []
         self.__towers: list[Tower] = []
         self.__shop = Shop(self, 100 * (level_number + 1))
@@ -62,7 +62,7 @@ class InGameState(state.State):
                 if event.button == pygame.BUTTON_LEFT:
                     if self.__place_tower and not self.__paused:
                         position = pygame.mouse.get_pos()
-                        self.__towers.append(self.__shop.add_tower(self.__enemy, position))
+                        self.__towers.append(self.__shop.add_tower(position))
                         self.__place_tower = False
                     self.check_buttons(pygame.mouse.get_pos())
 
@@ -71,19 +71,24 @@ class InGameState(state.State):
 
     def update(self, delta_time: float) -> None:
         if not self.__paused:
-            self.__enemy.update(delta_time)
+            for enemy in self.__enemies:
+                enemy.update(delta_time)
             for tower in self.__towers:
                 tower.update(delta_time)
 
             for projectile in self.__projectiles:
-                projectile.update(delta_time)
-                if projectile.get_position().distance_to(self.__enemy.get_position()) < 10:
+                enemy = projectile.get_target()
+                if not enemy.is_alive():
                     self.__projectiles.remove(projectile)
-                    self.__enemy.take_damage(projectile.get_damage())
-                # if not self.enemy.is_alive():
-                #     print('inimigo morreu')
-                #     pygame.quit()
+                    continue
+                projectile.update(delta_time)
+                if projectile.get_position().distance_to(enemy.get_position()) < 10:
+                    enemy.take_damage(projectile.get_damage())
+                    self.__projectiles.remove(projectile)
+                    if not enemy.is_alive():
+                        self.__enemies.remove(enemy)
                 #     sys.exit()
+                #     pygame.quit()
 
         # if self.__place_tower:
         #     self.__place_tower = False
@@ -104,7 +109,8 @@ class InGameState(state.State):
         for tower in self.__towers:
             tower.draw_at(screen)
 
-        self.__enemy.draw_at(screen)
+        for enemy in self.__enemies:
+            enemy.draw_at(screen)
         self.__player_base.draw_at(screen)
 
         for projectile in self.__projectiles:
@@ -142,4 +148,7 @@ class InGameState(state.State):
 
     def get_projectiles(self) -> list[Projectile]:
         return self.__projectiles
+
+    def get_enemies(self) -> list[Enemy]:
+        return self.__enemies
 
