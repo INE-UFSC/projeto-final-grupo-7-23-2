@@ -5,8 +5,8 @@ from entities.animated_entity import AnimatedEntity
 from path import Path
 
 class Enemy(AnimatedEntity):
-    def __init__(self, path: Path, health: float, speed: float, image_paths:dict[str, list[str]], fps ):
-        AnimatedEntity.__init__(self, path.get_start(), image_paths,fps )
+    def __init__(self, path: Path, health: float, speed: float, image_paths: list[str], fps ):
+        AnimatedEntity.__init__(self, path.get_start(), image_paths, fps )
         self.__path = path
         self.__state = "follow_path"
         self.__finished_path = False
@@ -43,7 +43,10 @@ class Enemy(AnimatedEntity):
         self.set_position(self.get_position() + self.get_velocity())
 
     def draw_at(self, screen: pygame.Surface) -> None:
-       screen.blit(self.get_image(), self.get_image().get_rect(center=self.get_position()))
+        image = self.get_image()
+        rect = image.get_rect()
+        screen.blit(self.get_image(), self.get_image().get_rect(center=self.get_position()))
+        pygame.draw.circle(screen, (0, 255, 0), self.get_position(), 5)
 
     def get_velocity(self) -> pygame.Vector2:
         return self.__velocity
