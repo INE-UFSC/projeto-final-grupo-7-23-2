@@ -1,7 +1,8 @@
-import pygame
 from entities.enemies.enemy import Enemy
 from path import Path
+from singletons.constants import Constants as C
 
 class Wolf(Enemy):
     def __init__(self, path: Path):
-        super().__init__(path, 250.0, 100.0, pygame.transform.flip(pygame.image.load('assets/entities/enemies/wolf/basic.png'), True, False)  )
+        image_paths = C().get_enemy_sprites('wolf', 6)
+        super().__init__(path, 250.0, 120.0, image_paths, 15)

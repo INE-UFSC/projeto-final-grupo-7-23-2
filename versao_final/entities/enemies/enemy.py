@@ -1,11 +1,12 @@
 import pygame
+import sys
 
-from entities.entity import Entity
+from entities.animated_entity import AnimatedEntity
 from path import Path
 
-class Enemy(Entity):
-    def __init__(self, path: Path, health: float, speed: float, image: pygame.Surface ):
-        Entity.__init__(self, path.get_start())
+class Enemy(AnimatedEntity):
+    def __init__(self, path: Path, health: float, speed: float, image_paths:dict[str, list[str]], fps ):
+        AnimatedEntity.__init__(self, path.get_start(), image_paths,fps )
         self.__path = path
         self.__state = "follow_path"
         self.__finished_path = False
@@ -19,23 +20,20 @@ class Enemy(Entity):
         self.__current_point_index = 1
         self.__speed = speed
         self.__velocity = pygame.Vector2(0, 0)
-        self.__image = image
 
     def update(self, delta_time: float) -> None:
-        if self.__state == "follow_path":
-            self.follow_path(delta_time)
 
-        elif self.__state == "idle":
-            self.idle(delta_time)
+        self.follow_path(delta_time)
 
         self.set_position(self.get_position() + self.get_velocity())
+
+        self.get_animation().update()
 
     def follow_path(self, delta_time: float) -> None:
         if self.get_position().distance_to(self.__current_point) < 1.5:
             if self.__current_point_index == len(self.__path.get_points()) - 1:
-                self.__state = "idle"
-                self.__finished_path = True
-                return
+                pygame.quit()
+                sys.exit()
 
             else:
                 self.__current_point_index += 1
@@ -43,9 +41,6 @@ class Enemy(Entity):
 
         self.set_velocity((self.__current_point - self.get_position()).normalize() * self.__speed * delta_time)
         self.set_position(self.get_position() + self.get_velocity())
-
-    def idle(self, delta_time: float) -> None:
-        self.__velocity = pygame.Vector2(0, 0)
 
     def draw_at(self, screen: pygame.Surface) -> None:
        screen.blit(self.get_image(), self.get_image().get_rect(center=self.get_position()))
@@ -71,4 +66,4 @@ class Enemy(Entity):
         return self.__is_alive
     
     def get_image(self) -> pygame.Surface:
-        return self.__image
+        return self.get_animation().get_current_image()
