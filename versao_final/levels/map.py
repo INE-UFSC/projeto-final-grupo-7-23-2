@@ -49,7 +49,5 @@ class Map(Drawable):
                 tile = pygame.transform.scale(tile, (size, size))
                 screen.blit(tile, (j * size, i * size))
 
-        self.__map_path.draw_at(screen)
-
     def get_path(self) -> Path:
         return self.__map_path

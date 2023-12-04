@@ -17,7 +17,6 @@ import states.game_over_state as game_over_state
 
 class InGameState(state.State):
     def __init__(self, context: game.Game, level_number: int):
-        # FIX: alterar menuUI para ingameUI quando for criado
         state.State.__init__(self, context )
 
         self.__map = Map(level_number)

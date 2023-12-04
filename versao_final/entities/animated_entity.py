@@ -7,15 +7,15 @@ class AnimatedEntity(Entity):
         super().__init__(position)
         self.__images: list[pygame.Surface] = []
         for path in image_paths:
-            self.__images.append(pygame.transform.flip(pygame.transform.scale2x(pygame.image.load(path)), True, False))
+            self.__images.append(pygame.transform.flip(pygame.transform.scale2x(pygame.image.load(path).convert_alpha()), True, False))
         self.__animation = Animation(self.__images, fps)
 
     def draw_at(self, screen: pygame.Surface):
-        screen.blit(self.__animation.get_image(), self.get_position())
-    
+        screen.blit(self.__animation.get_current_image(), self.get_position())
+
     def update(self):
         self.__animation.update()
-    
+
     def get_animation(self):
         return self.__animation
-    
+
