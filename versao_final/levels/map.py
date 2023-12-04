@@ -31,7 +31,6 @@ class Map(Drawable):
         tile_amount_y = tileset_image.get_size()[1] // 32
 
         tileset: list[pygame.Surface] = []
-        image_tile_size = 32
         for row in range(tile_amount_x):
             for col in range(tile_amount_y):
                 tileset.append(tileset_image.subsurface(col * 32.0, row * 32.0, 32.0, 32.0))

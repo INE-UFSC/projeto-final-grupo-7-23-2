@@ -31,6 +31,7 @@ class Tower(Entity):
 
         current_time = pygame.time.get_ticks()
         if current_time - self.__last_shoot > (1 / self.__shoot_rate) * 1000:
+            print('atirando')
             self.__bullets_list.append(Projectile(self.get_position() - self.__aim_vector, self.__target, self.__damage))
             self.__last_shoot = current_time
 
@@ -43,4 +44,4 @@ class Tower(Entity):
     def draw_at(self, screen: pygame.Surface) -> None:
         pygame.draw.circle(screen, (255, 0, 0, 100), self.get_position(), self.__range, 2)
         pygame.draw.rect(screen, (0, 100, 230), pygame.Rect(self.get_position() - pygame.Vector2(20, 20), (40, 40)))
-        pygame.draw.line(screen, (0, 255, 0), self.get_position(), self.get_position() - self.__aim_vector, 3)
+        pygame.draw.line(screen, (0, 255, 0), self.get_position(), self.get_position() - self.__aim_vector/2, 3)

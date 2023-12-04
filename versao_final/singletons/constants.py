@@ -17,6 +17,13 @@ class Constants(Singleton):
     
     def get_sound(self, sound):
         return f'assets/sounds/{sound}'
+    
+    def get_enemy_sprites(self, enemy, amount: int):
+        list = []
+        for i in range(amount):
+            list.append(f'assets/entities/enemies/{enemy}/S_Walk/{i+1}.png')
+        return list
+
 
     def get_screen_width(self):
         return self.__width

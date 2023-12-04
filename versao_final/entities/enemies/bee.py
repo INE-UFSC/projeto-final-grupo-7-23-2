@@ -1,11 +1,12 @@
-import pygame
 from entities.enemies.enemy import Enemy
 from path import Path
 import random
+from singletons.constants import Constants as C
 
 class Bee(Enemy):
     def __init__(self, path: Path):
-        super().__init__(path, 180.0, 170.0, pygame.transform.flip(pygame.image.load('assets/entities/enemies/bee/basic_bee.png'), True, False))
+        image_paths = C().get_enemy_sprites('bee', 6)
+        super().__init__(path, 180.0, 170.0, image_paths, 60)
 
     def take_damage(self, damage: int) -> None:
         chance = random.randint(1,4)
