@@ -31,6 +31,6 @@ class TowerFactory:
 
     def get_tower_price(self) -> float:
         return self.__tower_price
-    
+
     def get_upgrade_price(self) -> float:
         return self.__upgrade_price

@@ -5,7 +5,7 @@ import states.state as state
 import game
 
 from levels.map import Map
-from entities.enemies.ogre import Ogre
+from entities.enemies.wolf import Wolf
 from entities.tower import Tower
 from entities.projectile import Projectile
 from entities.player_base import PlayerBase
@@ -22,7 +22,7 @@ class InGameState(state.State):
         self.__map = Map(level_number)
         path = self.__map.get_path()
         self.__player_base = PlayerBase(path.get_end() + pygame.Vector2(40, 0))
-        self.__enemy = Ogre(path)
+        self.__enemy = Wolf(path)
 
         self.__projectiles: list[Projectile] = []
         self.__towers: list[Tower] = []
@@ -109,9 +109,9 @@ class InGameState(state.State):
 
         for projectile in self.__projectiles:
             projectile.draw_at(screen)
-        
+
         self.draw_at(screen)
-    
+
     def draw_at(self, screen: pygame.Surface):
         #constantes dimensionais
         width = C().get_screen_width()
@@ -131,15 +131,15 @@ class InGameState(state.State):
 
         for button in self.buttons:
             button.draw_at(screen)
-    
+
     def buy_tower(self):
         if self.__shop.can_buy_tower():
             self.__shop.buy_tower()
             self.__place_tower = True
-    
+
     def pause(self):
         self.__paused = not self.__paused
-    
+
     def get_projectiles(self) -> list[Projectile]:
         return self.__projectiles
-    
+

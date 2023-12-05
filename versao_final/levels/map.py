@@ -9,7 +9,7 @@ from singletons.constants import Constants as C
 
 class Map(Drawable):
     def __init__(self, map_number: int):
-        path_object = f'assets/layouts/map_{map_number}/map_{map_number}.tmj'
+        path_object = C().get_map_layout_path(map_number)
 
         with open(path_object, 'r') as file:
             map_dict = json.load(file)

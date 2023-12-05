@@ -45,11 +45,11 @@ class LevelSelectState(State):
                     lambda: context.change_state(menu_state.MenuState(context))
                 )
             ]
-    
+
         self.title = pygame.font.Font(C().get_font('Pixeltype.ttf'), 80).render('Escolha uma Fase', True, 'black')
         self.background = pygame.image.load('assets/backgrounds/basic_background.png')
 
-    
+
     def handle_input(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -59,7 +59,7 @@ class LevelSelectState(State):
                 self.check_buttons(pygame.mouse.get_pos())
             elif event.type == pygame.QUIT:
                 self.get_ctx().exit_game()
-    
+
     def draw_at(self, screen: pygame.Surface) -> None:
         screen.blit(
             self.background,

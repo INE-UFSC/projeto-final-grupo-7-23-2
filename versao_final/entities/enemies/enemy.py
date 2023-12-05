@@ -17,7 +17,6 @@ class Enemy(AnimatedEntity):
         if len(path.get_points()) < 2 :
             raise ValueError("Path must have at least two points")
 
-        self.__state = "follow_path"
         self.__path = path
         self.__finished_path = False
         self.__previous_point = self.__path.get_points()[0]
@@ -73,6 +72,6 @@ class Enemy(AnimatedEntity):
 
     def is_alive(self) -> bool:
         return self.__is_alive
-    
+
     def get_image(self) -> pygame.Surface:
         return self.get_animation().get_current_image()
