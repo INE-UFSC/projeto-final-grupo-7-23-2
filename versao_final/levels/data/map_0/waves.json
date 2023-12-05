@@ -1,0 +1,37 @@
+{
+    "waves": [
+        {
+            "enemies": [
+                {
+                    "type": "Wolf",
+                    "amount": 3,
+                    "delay": 1,
+                    "nextEnemieDelay": 5
+                },
+                {
+                    "type": "Ogre",
+                    "amount": 1,
+                    "delay": 1,
+                    "nextEnemieDelay": 5
+                }
+            ],
+            "delay": 5
+        },
+        {
+            "enemies": [
+                {
+                    "type": "Bee",
+                    "amount": 4,
+                    "delay": 1,
+                    "nextEnemieDelay": 3
+                },
+                {
+                    "type": "Ogre",
+                    "amount": 1,
+                    "delay": 1,
+                    "nextEnemieDelay": 5
+                }
+            ]
+        }
+    ]
+}

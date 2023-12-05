@@ -5,9 +5,10 @@ import states.state as state
 import game
 
 from levels.map import Map
+from entities.enemies.enemy import Enemy
 from entities.enemies.wolf import Wolf
 from entities.enemies.ogre import Ogre
-from entities.enemies.enemy import Enemy
+from entities.enemies.bee import Bee
 from entities.tower import Tower
 from entities.projectiles.projectile import Projectile
 from entities.player_base import PlayerBase
@@ -24,7 +25,7 @@ class InGameState(state.State):
         self.__map = Map(level_number)
         path = self.__map.get_path()
         self.__player_base = PlayerBase(path.get_end() + pygame.Vector2(40, 0))
-        self.__enemies = [Wolf(path), Ogre(path)]
+        self.__enemies = [Wolf(path), Ogre(path), Bee(path), Bee(path), Wolf(path)]
 
         self.__projectiles: list[Projectile] = []
         self.__towers: list[Tower] = []
