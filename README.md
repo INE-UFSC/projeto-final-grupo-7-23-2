@@ -21,7 +21,7 @@ Aqui vai um exemplo de TODO list contendo as etapas.
 
 # Como executar o jogo:
 
-Primeiramente, instale todas as dependências com `pip install -r requirements.txt`
-Em seguida, entre na pasta `versao_final` e execute
-Linux: `python3 main.py`
-Windows: `python main.py`
+Primeiramente, instale todas as dependências com `pip install -r requirements.txt` \
+Em seguida, entre na pasta `versao_final` e execute \
+Linux: `python3 main.py` \
+Windows: `python main.py` \
