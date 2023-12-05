@@ -24,6 +24,17 @@ class Constants(Singleton):
             list.append(f'assets/entities/enemies/{enemy}/S_Walk/{i+1}.png')
         return list
 
+    def get_tower_sprites(self, tower_level, amount: int):
+        list = []
+        for i in range(amount):
+            list.append(f'assets/entities/towers/idle/idle_{tower_level}/{i+1}.png')
+        return list
+    
+    def get_archer_sprites(self, state, amount: int):
+        list = []
+        for i in range(amount):
+            list.append(f'assets/entities/towers/archers/{state}/{i+1}.png')
+        return list
 
     def get_screen_width(self):
         return self.__width

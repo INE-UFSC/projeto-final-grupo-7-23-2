@@ -5,8 +5,13 @@ from entities.animated_entity import AnimatedEntity
 from path import Path
 
 class Enemy(AnimatedEntity):
-    def __init__(self, path: Path, health: float, speed: float, image_paths:dict[str, list[str]], fps ):
-        AnimatedEntity.__init__(self, path.get_start(), image_paths,fps )
+    def __init__(self, path: Path, health: float, speed: float, image_paths:list[str], fps ):
+        
+        images: list[pygame.Surface] = []
+        for image_path in image_paths:
+            images.append(pygame.transform.flip(pygame.transform.scale2x(pygame.image.load(image_path)), True, False))
+
+        AnimatedEntity.__init__(self, path.get_start(), images, fps )
         self.__path = path
         self.__state = "follow_path"
         self.__finished_path = False

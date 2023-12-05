@@ -6,9 +6,10 @@ import game
 
 from levels.map import Map
 from entities.enemies.wolf import Wolf
+from entities.enemies.ogre import Ogre
 from entities.enemies.enemy import Enemy
 from entities.tower import Tower
-from entities.projectile import Projectile
+from entities.projectiles.projectile import Projectile
 from entities.player_base import PlayerBase
 from shop import Shop
 from buttons.text_button import TextButton
@@ -24,7 +25,7 @@ class InGameState(state.State):
         self.__map = Map(level_number)
         path = self.__map.get_path()
         self.__player_base = PlayerBase(path.get_end() + pygame.Vector2(40, 0))
-        self.__enemies = [Wolf(path)]
+        self.__enemies = [Wolf(path), Ogre(path)]
 
         self.__projectiles: list[Projectile] = []
         self.__towers: list[Tower] = []
@@ -43,13 +44,10 @@ class InGameState(state.State):
         self.buttons = [
             TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/25, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower()), #COMPRAR TORRE 1
             TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/25, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade()), #APRIMORAR TORRE 1
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/8, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower()), #COMPRAR TORRE 2
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/8, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade()), #APRIMORAR TORRE 2
             TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Pausa', True, 'black'),'#FF5C00', width/5, height/4.6, width/15, height/35, click_sound, lambda: self.pause()), #PAUSAR
             TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Desistir', True, 'black'),'#FF0000', width/5, height/4, width/15, height/35, click_sound, lambda: context.change_state(game_over_state.GameOverState(context))) #DESISTIR
         ]
         self.shop_title = pygame.font.Font(C().get_font('Pixeltype.ttf'),40).render('Loja',True, 'black')
-        self.total_money = pygame.font.Font(C().get_font('Pixeltype.ttf'), 35).render('$1000',True, 'black')
 
     def handle_input(self) -> None:
         for event in pygame.event.get():
@@ -89,6 +87,7 @@ class InGameState(state.State):
                     self.__projectiles.remove(projectile)
                     if not enemy.is_alive():
                         self.__enemies.remove(enemy)
+                        self.__shop.add_money(50)
                 #     sys.exit()
                 #     pygame.quit()
 
@@ -125,6 +124,9 @@ class InGameState(state.State):
         width = C().get_screen_width()
         height = C().get_screen_height()
 
+        self.__tower_image = pygame.image.load('assets/entities/towers/idle/idle_0/1.png')
+        self.total_money = pygame.font.Font(C().get_font('Pixeltype.ttf'), 35).render(f'${self.__shop.get_money()}',True, 'black')
+
         pygame.draw.rect(screen, '#A3A3A3',pygame.Rect(0,0, width/4, height/3.5), border_bottom_right_radius=10) #retângulo maior
         pygame.draw.rect(screen, 'black',pygame.Rect(0,0, width/4, height/3.5), 3, border_bottom_right_radius=10 ) #contorno do círculo maior
 
@@ -133,9 +135,7 @@ class InGameState(state.State):
 
         pygame.draw.circle(screen, '#D9D9D9', (width/25, height/8), 37.5) #círculo 1
         pygame.draw.circle(screen, 'black', (width/25, height/8), 37.5, 2) #contorno do círculo 1
-
-        pygame.draw.circle(screen, '#D9D9D9', (width/8, height/8), 37.5) #círculo 2
-        pygame.draw.circle(screen, 'black', (width/8, height/8), 37.5, 2) #contorno do círculo 2
+        screen.blit(self.__tower_image, self.__tower_image.get_rect(center = (width/25, height/8 )))
 
         for button in self.buttons:
             button.draw_at(screen)
