@@ -19,7 +19,6 @@ import states.game_over_state as game_over_state
 
 class InGameState(state.State):
     def __init__(self, context: game.Game, level_number: int):
-        # FIX: alterar menuUI para ingameUI quando for criado
         state.State.__init__(self, context )
 
         self.__map = Map(level_number)
@@ -116,9 +115,9 @@ class InGameState(state.State):
 
         for projectile in self.__projectiles:
             projectile.draw_at(screen)
-        
+
         self.draw_at(screen)
-    
+
     def draw_at(self, screen: pygame.Surface):
         #constantes dimensionais
         width = C().get_screen_width()
@@ -139,17 +138,18 @@ class InGameState(state.State):
 
         for button in self.buttons:
             button.draw_at(screen)
-    
+
     def buy_tower(self):
         if self.__shop.can_buy_tower():
             self.__shop.buy_tower()
             self.__place_tower = True
-    
+
     def pause(self):
         self.__paused = not self.__paused
-    
+
     def get_projectiles(self) -> list[Projectile]:
         return self.__projectiles
-    
+
     def get_enemies(self) -> list[Enemy]:
         return self.__enemies
+

@@ -33,11 +33,11 @@ class InstructionsState(state.State):
 
             elif event.type == pygame.QUIT:
                 self.get_ctx().exit_game()
-    
+
     def draw_at(self, screen):
         screen.blit(self.background, self.background.get_rect(center = (C().get_screen_width()/2,C().get_screen_height()/2)))
         screen.blit(self.title, self.title.get_rect(center=(C().get_screen_width()/2,50)))
-        
+
         for button in self.buttons:
             button.draw_at(screen)
 

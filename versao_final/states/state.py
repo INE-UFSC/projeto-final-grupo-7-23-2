@@ -19,7 +19,7 @@ class State(ABC):
 
     def render(self):
         self.draw_at(self.get_ctx().get_screen())
-    
+
     @abstractmethod
     def draw_at(self):
         pass
@@ -29,3 +29,4 @@ class State(ABC):
             if button.get_rect().collidepoint(mouse_pos):
                 button.handle_click()
                 return
+

@@ -12,7 +12,7 @@ class AnimatedEntity(Entity):
     
     def update(self):
         self.__animation.update()
-    
+
     def get_animation(self):
         return self.__animation
-    
+

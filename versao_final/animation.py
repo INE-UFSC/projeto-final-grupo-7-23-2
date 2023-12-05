@@ -16,11 +16,12 @@ class Animation:
 
     def get_current_image(self) -> pygame.Surface:
         return self.__images[self.__current_image_index]
-    
+
     def change_animation(self, sprites: list[pygame.Surface]):
         self.__images = sprites
         self.__current_image_index = 0
-    
+
     def flip(self, flip_horizontally, flip_vertically):
         for i in range(len(self.__images)):
             self.__images[i] = pygame.transform.flip(self.__images[i], flip_horizontally, flip_vertically)
+
