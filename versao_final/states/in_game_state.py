@@ -18,6 +18,7 @@ from shop import Shop
 from buttons.text_button import TextButton
 from singletons.constants import Constants as C
 import states.game_over_state as game_over_state
+import states.level_select_state as level_select_state
 
 
 class InGameState(state.State):
@@ -100,6 +101,9 @@ class InGameState(state.State):
                         self.__enemies.remove(enemy)
                         self.__coin_sound.play()
                         self.__shop.add_money(50)
+        
+        if self.__enemies == []:
+            self.get_ctx().change_state(level_select_state.LevelSelectState(self.get_ctx()))
                 #     sys.exit()
                 #     pygame.quit()
 

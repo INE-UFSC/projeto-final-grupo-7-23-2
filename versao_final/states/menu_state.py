@@ -15,6 +15,7 @@ class MenuState(state.State):
         state.State.__init__(self, context)
 
         click_sound = pygame.mixer.Sound(C().get_sound('basic_click.wav'))
+        #self.__music = pygame.mixer.Sound(C().get_sound(''))
 
         self.buttons = [
             TextButton(
