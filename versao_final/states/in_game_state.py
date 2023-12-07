@@ -43,16 +43,18 @@ class InGameState(state.State):
         click_sound = pygame.mixer.Sound(C().get_sound('basic_click.wav'))
         buy_sound = pygame.mixer.Sound(C().get_sound('buy_sound.wav'))
         upgrade_sound = pygame.mixer.Sound(C().get_sound('upgrade_sound.wav'))
+        self.__coin_sound = pygame.mixer.Sound(C().get_sound('coin_sound.wav'))
 
         self.buttons = [
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/25, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower(ArcherTower)), #COMPRAR TORRE 1
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/25, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade(ArcherTower)), #APRIMORAR TORRE 1
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/8, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower(Catapult)), #COMPRAR TORRE 2
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/8, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade(Catapult)), #APRIMORAR TORRE 2
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($50)', True, 'black'),'#D9D9D9', width/25, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower(ArcherTower)), #COMPRAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($100)', True, 'black'),'#D9D9D9', width/25, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade(ArcherTower)), #APRIMORAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($100)', True, 'black'),'#D9D9D9', width/8, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower(Catapult)), #COMPRAR TORRE 2
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($150)', True, 'black'),'#D9D9D9', width/8, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade(Catapult)), #APRIMORAR TORRE 2
             TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Pausa', True, 'black'),'#FF5C00', width/5, height/4.6, width/15, height/35, click_sound, lambda: self.pause()), #PAUSAR
             TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Desistir', True, 'black'),'#FF0000', width/5, height/4, width/15, height/35, click_sound, lambda: context.change_state(game_over_state.GameOverState(context))) #DESISTIR
         ]
         self.shop_title = pygame.font.Font(C().get_font('Pixeltype.ttf'),40).render('Loja',True, 'black')
+
 
     def handle_input(self) -> None:
         for event in pygame.event.get():
@@ -96,6 +98,7 @@ class InGameState(state.State):
                     self.__projectiles.remove(projectile)
                     if not enemy.is_alive():
                         self.__enemies.remove(enemy)
+                        self.__coin_sound.play()
                         self.__shop.add_money(50)
                 #     sys.exit()
                 #     pygame.quit()
