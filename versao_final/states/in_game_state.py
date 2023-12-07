@@ -58,14 +58,12 @@ class InGameState(state.State):
         ]
         self.shop_title = pygame.font.Font(C().get_font('Pixeltype.ttf'),40).render('Loja',True, 'black')
 
-
     def handle_input(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.get_ctx().exit_game()
                 elif event.key == pygame.K_p:
-                    print(self.__shop.get_money())
                     self.buy_tower()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -106,22 +104,9 @@ class InGameState(state.State):
                         self.__enemies.remove(enemy)
                         self.__coin_sound.play()
                         self.__shop.add_money(50)
-        
-        if self.__enemies == []:
+
+        if self.__wave_manager.get_finished():
             self.get_ctx().change_state(level_select_state.LevelSelectState(self.get_ctx()))
-                #     sys.exit()
-                #     pygame.quit()
-
-        # if self.__place_tower:
-        #     self.__place_tower = False
-        #     new_tower = Tower(pygame.Vector2(pygame.mouse.get_pos()), 250, self.__enemy, 50, self.__projectiles)
-        #     self.__towers.append(new_tower)
-        #     self.__drawables.append(new_tower)
-
-        # if self.enemy.finished_path():
-        #     print('inimigo chegou na base')
-        #     pygame.quit()
-        #     sys.exit()
 
     def render(self) -> None:
         screen = self.get_ctx().get_screen()

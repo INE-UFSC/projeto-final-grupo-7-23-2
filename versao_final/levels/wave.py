@@ -56,10 +56,7 @@ class Wave:
                 return
 
             else:
-                print('spawnando')
                 enemy_type = self.__enemies_data[self.__current_enemy_index].type
-                print(enemy_type)
-                print(len(self.__enemies_ref))
                 if enemy_type == 'Bee':
                     self.__enemies_ref.append(Bee(self.__path))
                 elif enemy_type == 'Ogre':
@@ -73,7 +70,6 @@ class Wave:
 
         # waiting
         else:
-            print('esperando')
             if pygame.time.get_ticks() - self.__last_time > self.__wait_time:
                 self.__waiting = False
                 self.__last_time = pygame.time.get_ticks()
