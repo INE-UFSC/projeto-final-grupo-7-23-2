@@ -10,13 +10,16 @@ from levels.wave_manager import WaveManager
 from entities.enemies.wolf import Wolf
 from entities.enemies.ogre import Ogre
 from entities.enemies.bee import Bee
-from entities.tower import Tower
+from entities.towers.tower import Tower
+from entities.towers.archer_tower import ArcherTower
+from entities.towers.catapult import Catapult
 from entities.projectiles.projectile import Projectile
 from entities.player_base import PlayerBase
 from shop import Shop
 from buttons.text_button import TextButton
 from singletons.constants import Constants as C
 import states.game_over_state as game_over_state
+import states.level_select_state as level_select_state
 
 
 class InGameState(state.State):
@@ -32,7 +35,8 @@ class InGameState(state.State):
         self.__projectiles: list[Projectile] = []
         self.__towers: list[Tower] = []
         self.__shop = Shop(self, 100 * (level_number + 1))
-        self.__place_tower = False
+        self.__place_archer_tower = False
+        self.__place_catapult_tower = False
 
         self.__paused = False
 
@@ -42,14 +46,18 @@ class InGameState(state.State):
         click_sound = pygame.mixer.Sound(C().get_sound('basic_click.wav'))
         buy_sound = pygame.mixer.Sound(C().get_sound('buy_sound.wav'))
         upgrade_sound = pygame.mixer.Sound(C().get_sound('upgrade_sound.wav'))
+        self.__coin_sound = pygame.mixer.Sound(C().get_sound('coin_sound.wav'))
 
         self.buttons = [
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($XX)', True, 'black'),'#D9D9D9', width/25, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower()), #COMPRAR TORRE 1
-            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($XX)', True, 'black'),'#D9D9D9', width/25, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade()), #APRIMORAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($50)', True, 'black'),'#D9D9D9', width/25, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower(ArcherTower)), #COMPRAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($100)', True, 'black'),'#D9D9D9', width/25, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade(ArcherTower)), #APRIMORAR TORRE 1
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Comprar($100)', True, 'black'),'#D9D9D9', width/8, height/4.6, width/15, height/35, buy_sound, lambda: self.buy_tower(Catapult)), #COMPRAR TORRE 2
+            TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Aprimorar($150)', True, 'black'),'#D9D9D9', width/8, height/4, width/15, height/35, upgrade_sound, lambda: self.__shop.upgrade(Catapult)), #APRIMORAR TORRE 2
             TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Pausa', True, 'black'),'#FF5C00', width/5, height/4.6, width/15, height/35, click_sound, lambda: self.pause()), #PAUSAR
             TextButton(pygame.font.Font(C().get_font('Pixeltype.ttf'),13).render('Desistir', True, 'black'),'#FF0000', width/5, height/4, width/15, height/35, click_sound, lambda: context.change_state(game_over_state.GameOverState(context))) #DESISTIR
         ]
         self.shop_title = pygame.font.Font(C().get_font('Pixeltype.ttf'),40).render('Loja',True, 'black')
+
 
     def handle_input(self) -> None:
         for event in pygame.event.get():
@@ -62,10 +70,14 @@ class InGameState(state.State):
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
-                    if self.__place_tower and not self.__paused:
+                    if not self.__paused:
                         position = pygame.mouse.get_pos()
-                        self.__towers.append(self.__shop.add_tower(position))
-                        self.__place_tower = False
+                        if self.__place_archer_tower:
+                            self.__towers.append(self.__shop.add_tower(ArcherTower, position))
+                            self.__place_archer_tower = False
+                        elif self.__place_catapult_tower:
+                            self.__towers.append(self.__shop.add_tower(Catapult, position))
+                            self.__place_catapult_tower = False
                     self.check_buttons(pygame.mouse.get_pos())
 
             elif event.type == pygame.QUIT:
@@ -88,11 +100,15 @@ class InGameState(state.State):
                     continue
                 projectile.update(delta_time)
                 if projectile.get_position().distance_to(enemy.get_position()) < 10:
-                    enemy.take_damage(projectile.get_damage())
+                    projectile.hit()
                     self.__projectiles.remove(projectile)
                     if not enemy.is_alive():
                         self.__enemies.remove(enemy)
+                        self.__coin_sound.play()
                         self.__shop.add_money(50)
+        
+        if self.__enemies == []:
+            self.get_ctx().change_state(level_select_state.LevelSelectState(self.get_ctx()))
                 #     sys.exit()
                 #     pygame.quit()
 
@@ -129,7 +145,8 @@ class InGameState(state.State):
         width = C().get_screen_width()
         height = C().get_screen_height()
 
-        self.__tower_image = pygame.image.load('assets/entities/towers/idle/idle_0/1.png')
+        self.__archer_tower_image = pygame.image.load('assets/entities/towers/archer_tower/idle/idle_0/1.png')
+        self.__catapult_image = pygame.image.load('assets/entities/towers/catapult/weapon/weapon_0/1.png')
         self.total_money = pygame.font.Font(C().get_font('Pixeltype.ttf'), 35).render(f'${self.__shop.get_money()}',True, 'black')
 
         pygame.draw.rect(screen, '#A3A3A3',pygame.Rect(0,0, width/4, height/3.5), border_bottom_right_radius=10) #retângulo maior
@@ -139,16 +156,24 @@ class InGameState(state.State):
         screen.blit(self.total_money, self.total_money.get_rect(center=(width/5, height/8)))
 
         pygame.draw.circle(screen, '#D9D9D9', (width/25, height/8), 37.5) #círculo 1
+        screen.blit(self.__archer_tower_image, self.__archer_tower_image.get_rect(center = (width/25, height/8 )))
         pygame.draw.circle(screen, 'black', (width/25, height/8), 37.5, 2) #contorno do círculo 1
-        screen.blit(self.__tower_image, self.__tower_image.get_rect(center = (width/25, height/8 )))
+
+        pygame.draw.circle(screen, '#D9D9D9', (width/8, height/8), 37.5) #círculo 2
+        screen.blit(self.__catapult_image, self.__catapult_image.get_rect(center = (width/8, height/8 )))
+        pygame.draw.circle(screen, 'black', (width/8, height/8), 37.5, 2) #contorno do círculo 2
+        
 
         for button in self.buttons:
             button.draw_at(screen)
 
-    def buy_tower(self):
-        if self.__shop.can_buy_tower():
-            self.__shop.buy_tower()
-            self.__place_tower = True
+    def buy_tower(self, type_tower: type[Tower]):
+        if self.__shop.can_buy_tower(type_tower):
+            self.__shop.buy_tower(type_tower)
+            if type_tower == ArcherTower:
+                self.__place_archer_tower = True
+            elif type_tower == Catapult:
+                self.__place_catapult_tower = True
 
     def pause(self):
         self.__paused = not self.__paused

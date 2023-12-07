@@ -1,3 +1,4 @@
+from __future__ import annotations
 import pygame
 
 from entities.entity import Entity
@@ -11,10 +12,14 @@ class Projectile(Entity):
         self.__speed = 250
         self.__target = target
         self.__damage = damage
+        self.__velocity = pygame.Vector2(0,0)
 
     def update(self, delta_time: float) -> None:
-        self.__velocity = (self.__target.get_position() - self.get_position()).normalize() * self.__speed * delta_time
-        self.set_position(self.get_position() + self.__velocity)
+        self.__velocity = (self.get_target().get_position() - self.get_position()).normalize() * self.__speed * delta_time
+        self.set_position(self.get_position() + self.get_velocity())
+    
+    def hit(self):
+        self.get_target().take_damage(self.get_damage())
 
     def get_damage(self) -> float:
         return self.__damage
@@ -24,3 +29,6 @@ class Projectile(Entity):
 
     def get_velocity(self):
         return self.__velocity
+    
+    def get_tower(self):
+        return self.__tower
