@@ -5,14 +5,14 @@
                 {
                     "type": "Wolf",
                     "amount": 3,
-                    "delay": 1,
-                    "nextEnemieDelay": 5
+                    "delay": 5,
+                    "nextEnemyDelay": 8
                 },
                 {
                     "type": "Ogre",
                     "amount": 1,
                     "delay": 1,
-                    "nextEnemieDelay": 5
+                    "nextEnemyDelay": 9
                 }
             ],
             "delay": 5
@@ -23,15 +23,16 @@
                     "type": "Bee",
                     "amount": 4,
                     "delay": 1,
-                    "nextEnemieDelay": 3
+                    "nextEnemyDelay": 3
                 },
                 {
                     "type": "Ogre",
                     "amount": 1,
                     "delay": 1,
-                    "nextEnemieDelay": 5
+                    "nextEnemyDelay": 5
                 }
-            ]
+            ],
+            "delay": 5
         }
     ]
 }

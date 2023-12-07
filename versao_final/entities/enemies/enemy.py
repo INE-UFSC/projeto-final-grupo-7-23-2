@@ -10,7 +10,7 @@ class Enemy(AnimatedEntity):
     def __init__(self, path: Path, health: float, speed: float, image_paths:list[str]):
 
         fps = int(9.7638368154195958 * log(speed - 45, 10))
-        
+
         images: list[pygame.Surface] = []
         for image_path in image_paths:
             images.append(pygame.transform.flip(pygame.transform.scale2x(pygame.image.load(image_path)), True, False))

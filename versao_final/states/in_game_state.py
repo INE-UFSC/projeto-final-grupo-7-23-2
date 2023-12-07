@@ -6,6 +6,7 @@ import game
 
 from levels.map import Map
 from entities.enemies.enemy import Enemy
+from levels.wave_manager import WaveManager
 from entities.enemies.wolf import Wolf
 from entities.enemies.ogre import Ogre
 from entities.enemies.bee import Bee
@@ -25,7 +26,8 @@ class InGameState(state.State):
         self.__map = Map(level_number)
         path = self.__map.get_path()
         self.__player_base = PlayerBase(path.get_end() + pygame.Vector2(40, 0))
-        self.__enemies = [Wolf(path), Ogre(path), Bee(path), Bee(path), Wolf(path)]
+        self.__enemies: list[Enemy] = []
+        self.__wave_manager = WaveManager(level_number, self.__enemies, path)
 
         self.__projectiles: list[Projectile] = []
         self.__towers: list[Tower] = []
@@ -71,6 +73,9 @@ class InGameState(state.State):
 
     def update(self, delta_time: float) -> None:
         if not self.__paused:
+            self.__wave_manager.update(delta_time)
+
+            print(len(self.__enemies))
             for enemy in self.__enemies:
                 enemy.update(delta_time)
             for tower in self.__towers:

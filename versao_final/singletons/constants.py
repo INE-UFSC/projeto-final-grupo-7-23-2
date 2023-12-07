@@ -35,8 +35,12 @@ class Constants(Singleton):
         for i in range(amount):
             list.append(f'assets/entities/towers/archers/{state}/{i+1}.png')
         return list
+
     def get_map_layout_path(self, map_number: int) -> str:
         return f'levels/data/map_{map_number}/map_{map_number}.tmj'
+
+    def get_map_waves_path(self, map_number: int) -> str:
+        return f'levels/data/map_{map_number}/waves.json'
 
     def get_screen_width(self):
         return self.__width
