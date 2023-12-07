@@ -27,14 +27,6 @@ class MenuState(state.State):
                 lambda: self.get_ctx().change_state(level_select_state.LevelSelectState(context))
             ),
             TextButton(
-                pygame.font.Font(C().get_font('Pixeltype.ttf'), 60).render('Como Jogar', True, 'black'),
-                'cyan',
-                C().get_screen_width() / 2, 1.75 * C().get_screen_height() / 4,
-                230, 55,
-                click_sound,
-                lambda: self.get_ctx().change_state(instructions_state.InstructionsState(context))
-            ),
-            TextButton(
                 pygame.font.Font(C().get_font('Pixeltype.ttf'), 60).render('Sair', True, 'black'),
                 'red',
                 C().get_screen_width() / 2, 2.5 * C().get_screen_height() / 4,
