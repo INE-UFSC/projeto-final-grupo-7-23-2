@@ -3,11 +3,11 @@ from entities.projectiles.projectile import Projectile
 from entities.enemies.enemy import Enemy
 
 class Arrow(Projectile):
-    def __init__(self, position: pygame.Vector2, target: Enemy, damage: float, speed: int):
+    def __init__(self, position: pygame.Vector2, target: Enemy, damage: float):
         Projectile.__init__(self, position, target, damage)
 
-        self.__image = pygame.image.load('assets/entities/towers/arrow.png')
-        self.__speed = speed
+        self.__image = pygame.image.load('assets/entities/towers/archer_tower/arrow.png')
+        self.__speed = 250
         self.__angle = 0
 
     def draw_at(self, screen):

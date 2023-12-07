@@ -24,17 +24,25 @@ class Constants(Singleton):
             list.append(f'assets/entities/enemies/{enemy}/S_Walk/{i+1}.png')
         return list
 
-    def get_tower_sprites(self, tower_level, amount: int):
+    def get_tower_sprites(self, type, tower_level, amount: int):
         list = []
         for i in range(amount):
-            list.append(f'assets/entities/towers/idle/idle_{tower_level}/{i+1}.png')
+            list.append(f'assets/entities/towers/{type}/idle/idle_{tower_level}/{i+1}.png')
         return list
     
     def get_archer_sprites(self, state, amount: int):
         list = []
         for i in range(amount):
-            list.append(f'assets/entities/towers/archers/{state}/{i+1}.png')
+            list.append(f'assets/entities/towers/archer_tower/archers/{state}/{i+1}.png')
         return list
+    
+    def get_weapon_sprites(self, weapon_level,  amount: int):
+        list = []
+        for i in range(amount):
+            list.append(f'assets/entities/towers/catapult/weapon/weapon_{weapon_level}/{i+1}.png')
+        return list
+
+
     def get_map_layout_path(self, map_number: int) -> str:
         return f'levels/data/map_{map_number}/map_{map_number}.tmj'
 
