@@ -46,8 +46,7 @@ class Enemy(AnimatedEntity):
         next_position = self.get_position() + self.get_velocity() * delta_time
         if (next_position - self.__path.get_points()[self.__current_point_index - 1]).magnitude() > self.__support_vector.magnitude():
             if self.__current_point_index == len(self.__path.get_points()) - 1:
-                pygame.quit()
-                sys.exit()
+                self.__finished_path = True
 
             else:
                 self.__current_point_index += 1
@@ -84,3 +83,6 @@ class Enemy(AnimatedEntity):
 
     def get_image(self) -> pygame.Surface:
         return self.get_animation().get_current_image()
+
+    def get_finished_path(self) -> bool:
+        return self.__finished_path

@@ -88,6 +88,10 @@ class InGameState(state.State):
             print(len(self.__enemies))
             for enemy in self.__enemies:
                 enemy.update(delta_time)
+                if enemy.get_finished_path():
+                    self.get_ctx().change_state(game_over_state.GameOverState(self.get_ctx()))
+                    return
+
             for tower in self.__towers:
                 tower.update(delta_time)
 
@@ -106,7 +110,8 @@ class InGameState(state.State):
                         self.__shop.add_money(50)
 
         if self.__wave_manager.get_finished():
-            self.get_ctx().change_state(level_select_state.LevelSelectState(self.get_ctx()))
+            if len(self.__enemies) == 0:
+                self.get_ctx().change_state(level_select_state.LevelSelectState(self.get_ctx()))
 
     def render(self) -> None:
         screen = self.get_ctx().get_screen()
